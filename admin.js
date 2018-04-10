@@ -1,12 +1,12 @@
 let AdminPanelSocket = null;
 const CreaRecords = [];
 
-module.exports = class AdminServices {
+module.exports = class AdminService {
 
   static async startAdmin(socket) {
   console.log('startAdmin');
     AdminPanelSocket = socket;
-    AdminServices.sendRecords();
+    AdminService.sendRecords();
   }
 
   static async stopAdmin() {
@@ -16,7 +16,7 @@ module.exports = class AdminServices {
   static async saveCreaRecord(record) {
     console.log('ShowCreaRecord', record);
     CreaRecords.push(record);
-    AdminServices.sendRecords();
+    AdminService.sendRecords();
   }
 
   static async sendRecords() {

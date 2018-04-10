@@ -15,11 +15,11 @@ const words = [
   ['mot91', 'mot92', 'mot93'],
 ];
 
-module.exports = class CreaServices {
+module.exports = class CreaService {
   static async handleCrea(socket) {
     console.log('starting crea');
     try{
-    await CreaServices.creaCycle(socket, 0);
+    await CreaService.creaCycle(socket, 0);
     } catch( e) {
       throw e;
     }
@@ -31,12 +31,12 @@ module.exports = class CreaServices {
     socket.emit('words', words[index]);
     const startTime = Date.now();
     const duration = await Promise.race([
-      CreaServices.buttonEvent(startTime),
+      CreaService.buttonEvent(startTime),
       Helper.delay(5)
     ]);
     console.log('duration', duration);
     mainSocketClient.emit('crea-record', duration);
-    await CreaServices.creaCycle(socket, index + 1);
+    await CreaService.creaCycle(socket, index + 1);
   }
 
   static async buttonEvent(startTime) {
