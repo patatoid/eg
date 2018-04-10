@@ -1,0 +1,20 @@
+{
+  "name": "escape_game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "engines" : { "node" : "v8.11.1" },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "set NODE_ENV=dev && node app.js"
+  },
+  "author": "Leopold Sayous",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.5.8",
+    "execa": "^0.10.0",
+    "express": "^4.16.3",
+    "pug": "^2.0.3",
+    "socket.io": "^2.1.0"
+  }
+}

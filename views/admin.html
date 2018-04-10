@@ -1,0 +1,27 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Roger Moore</title>
+    <style>
+    </style>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      socket.emit('start-admin');
+      socket.on('crea-records', (records)=>{
+        console.log('crea-records', records);
+        document.getElementById('container').innerHTML='';
+        for(let record of records){
+          document.getElementById('container').innerHTML+=record+'<br/>';
+        }
+      });
+    </script>
+  </head>
+
+  <body>
+    <div class="container" id="container">
+    </div>
+  </body>
+</html>
+
+
