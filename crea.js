@@ -1,6 +1,5 @@
 const Helper = require('./helper');
-const mainSocketClient = require('socket.io-client')('http://localhost:3000');
-mainSocketClient.on('connect', () => console.log('connected to mainServer'));
+const MainServerService = require('./main.server.service');
 
 const words = [
   ['mot01', 'mot02', 'mot03'],
@@ -18,9 +17,9 @@ const words = [
 module.exports = class CreaService {
   static async handleCrea(socket) {
     console.log('starting crea');
-    try{
-    await CreaService.creaCycle(socket, 0);
-    } catch( e) {
+    try {
+      await CreaService.creaCycle(socket, 0);
+    } catch(e) {
       throw e;
     }
   }
@@ -35,7 +34,7 @@ module.exports = class CreaService {
       Helper.delay(5)
     ]);
     console.log('duration', duration);
-    mainSocketClient.emit('crea-record', duration);
+    MainServerService.send('crea-record', duration);
     await CreaService.creaCycle(socket, index + 1);
   }
 

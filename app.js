@@ -18,6 +18,3 @@ io.on('connection', function(socket) {
 });
 
 http.listen(config.port, () => console.log(`app listening on port ${config.port}!`));
-
-const process= url => ['open', ['-a', '/Applications/Chromium.app', `${url}`]];
-const openURL = url => execa(...process(url));

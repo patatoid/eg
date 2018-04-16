@@ -5,3 +5,6 @@ module.exports=class Helper {
     });
   }
 }
+
+const process= url => ['open', ['-a', '/Applications/Chromium.app', `${url}`]];
+const openURL = url => execa(...process(url));
