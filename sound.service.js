@@ -8,6 +8,7 @@ class SoundService {
   static play(sound) {
    const player = new Player(sound); 
    player.play();
+   player.on('error', () => {})
   }
 }
 module.exports = SoundService;
