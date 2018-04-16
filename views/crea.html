@@ -20,7 +20,7 @@
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script>
     var socket = io();
-    socket.emit('start-crea');
+    socket.emit('crea-connected');
     socket.on('words', function(words){
       for(var i=0; i<words.length; i++){
         document.getElementById(i.toString()).innerHTML=words[i];

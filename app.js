@@ -11,7 +11,8 @@ const io = require('socket.io')(http);
 app.use(express.static(__dirname + '/views'));
 
 io.on('connection', function(socket) {
-  socket.on('start-crea', () => CreaService.handleCrea(socket));
+  socket.on('crea-connected', () => CreaService.handleCrea(socket));
+  socket.on('start-crea', () => CreaService.startCrea(socket));
   socket.on('beginning', () => ActionService.beginning(socket));
   socket.on('start-admin', () => AdminService.startAdmin(socket));
   socket.on('crea-record', (record) => AdminService.saveCreaRecord(record));

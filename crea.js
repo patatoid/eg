@@ -14,6 +14,8 @@ const words = [
   ['mot91', 'mot92', 'mot93'],
 ];
 
+let creaCurrentProcess = null;
+
 module.exports = class CreaService {
   static async handleCrea(socket) {
     console.log('starting crea');
@@ -24,8 +26,24 @@ module.exports = class CreaService {
     }
   }
 
+  static async startCrea(socket) {
+    console.log('launch crea');
+    const url='http://localhost:3000/crea.html';
+    creaCurrentProcess = Helper.launchProcess(['xinit', ['-e', 'chromium-browser', '--kiosk', '--start-fullscreen', '--window-size=1920,1080', url]]);
+    //Helper.launchProcess(['sh', ['scripts/start-chromium.sh'], {env: {URL: url}}]);
+  }
+
+  static stopCrea() {
+    console.log('Stop crea window');
+    if(creaCurrentProcess) {
+      creaCurrentProcess.stdin.pause();
+      creaCurrentProcess.kill();
+      creaCurrentProcess = null;
+    }
+  }
+
   static async creaCycle(socket, index) {
-    if(index>=10) return;
+    if(index>=10) return CreaService.stopCrea();
     console.log('cycle', index);
     socket.emit('words', words[index]);
     const startTime = Date.now();

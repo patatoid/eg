@@ -15,10 +15,15 @@
           document.getElementById('container').innerHTML+=record+'<br/>';
         }
       });
+
+function startCrea() {
+  socket.emit('start-crea');
+}
     </script>
   </head>
 
   <body>
+    <button class="button" onClick='startCrea()'>start crea</button>
     <div class="container" id="container">
     </div>
   </body>
