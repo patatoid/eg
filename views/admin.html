@@ -19,10 +19,15 @@
 function startCrea() {
   socket.emit('start-crea');
 }
+
+function begin() {
+  socket.emit('begin');
+}
     </script>
   </head>
 
   <body>
+    <button class="button" onClick='begin()'>begin escape game</button>
     <button class="button" onClick='startCrea()'>start crea</button>
     <div class="container" id="container">
     </div>

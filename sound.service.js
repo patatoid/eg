@@ -1,10 +1,13 @@
 const Player = require('player');
 
-const siren = new Player('./sound/xxx.mp3');
+const siren = './sounds/siren.mp3';
 
 class SoundService {
+  static get siren() { return siren; }
 
-  static play() {
+  static play(sound) {
+   const player = new Player(sound); 
+   player.play();
   }
 }
 module.exports = SoundService;

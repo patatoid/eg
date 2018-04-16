@@ -1,4 +1,5 @@
 const Helper = require('./helper');
+const SoundService = require('./sound.service');
 
 const ON=1;
 const OFF=0;
@@ -35,12 +36,12 @@ class ActionService {
    }
   }
   
-  static async beginning(socket) {
+  static async begin(socket) {
     await ActionService.change(MAGNET_ENTRANCE, OFF);
     await Helper.delay(3);
+    SoundService.play(SoundService.siren);
     await ActionService.change(MAGNET_LOCK, ON);
     await ActionService.change(GLOBAL_LIGHT, OFF);
-    await Helper.delay(2);
     await ActionService.change(GYRO, ON);
     await ActionService.change(SMALL_ELEC_LIGHT, ON);
   }
