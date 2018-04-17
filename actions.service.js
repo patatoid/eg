@@ -1,22 +1,7 @@
 const Helper = require('./helper');
 const SoundService = require('./sound.service');
+const DeviceService = require('./device.service');
 
-const ON=1;
-const OFF=0;
-const MAGNET_ENTRANCE=0;
-const MAGNET_LOCK=1;
-const GLOBAL_LIGHT=2;
-const SMALL_ELEC_LIGHT=3;
-const GYRO=4;
-const MAGNET_CREA_KEY=5;
-const defaultState = {
-  MAGNET_ENTRANCE: ON,
-  MAGNET_LOCK: OFF,
-  GLOBAL_LIGHT: ON,
-  SMALL_ELEC_LIGHT: OFF,
-  GYRO: OFF,
-  MAGNET_CREA_KEY: OFF,
-};
 
 class ActionService {
   static async execute(action) {
@@ -30,25 +15,21 @@ class ActionService {
     }
   }
 
-  static async resetState() {
-   for(let device in defaultState) {
-    await ActionService.change(device, defaultState[device]);
-   }
-  }
   
   static async begin(socket) {
-    await ActionService.change(MAGNET_ENTRANCE, OFF);
+    await DeviceService.on(DeviceService.MAGNET_LOCK);
+    await Helper.delay(2);
+    await DeviceService.off(DeviceService.MAGNET_LOCK);
+    return;
+    await DeviceService.off(DeviceService.MAGNET_ENTRANCE);
     await Helper.delay(3);
     SoundService.play(SoundService.siren);
-    await ActionService.change(MAGNET_LOCK, ON);
-    await ActionService.change(GLOBAL_LIGHT, OFF);
-    await ActionService.change(GYRO, ON);
-    await ActionService.change(SMALL_ELEC_LIGHT, ON);
+    await DeviceService.on(DeviceService.MAGNET_LOCK);
+    await DeviceService.off(DeviceService.GLOBAL_LIGHT);
+    await DeviceService.on(DeviceService.GYRO);
+    await DeviceService.on(DeviceService.SMALL_ELEC_LIGHT);
   }
 
-  static async change(device, state) {
-    
-  }
 
 }
 
