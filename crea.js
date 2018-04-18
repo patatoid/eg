@@ -1,6 +1,11 @@
 const Helper = require('./helper');
 const SoundService = require('./sound.service');
 const MainServerService = require('./main.server.service');
+const gpio = require('rpi-gpio');
+ 
+const CREA_BUTTON_PIN = 13;
+gpio.setup(CREA_BUTTON_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+
 
 const words = [
   ['mot01', 'mot02', 'mot03'],
@@ -47,22 +52,37 @@ module.exports = class CreaService {
     if(index>=10) return CreaService.stopCrea();
     console.log('cycle', index);
     socket.emit('words', words[index]);
-    const startTime = Date.now();
+    const cycleStartTime = Date.now();
     const creaRecord = await Promise.race([
-      CreaService.buttonEvent(startTime),
+      CreaService.buttonEvent(cycleStartTime),
       Helper.delay(30)
     ]);
     MainServerService.send('crea-record', creaRecord);
     await CreaService.creaCycle(socket, index + 1);
   }
 
-  static async buttonEvent(startTime) {
-    await Helper.delay(Math.random()*10);
+  static async buttonEvent(cycleStartTime) {
+    await CreaService.buttonChanged(CREA_BUTTON_PIN, true);
+    console.log('start recording');
+    const startTime = Date.now()-cycleStartTime;
     const recordProcess = SoundService.startRecording();
-    await Helper.delay(Math.random()*2+3);
+    await CreaService.buttonChanged(CREA_BUTTON_PIN, false);
     const recordedData = await SoundService.stopRecording(recordProcess);
-    console.log('recordedData', recordedData.length);
-    return {startTime: Date.now()-startTime, data: recordedData.toString('base64')};
+    console.log('stop recording -> recordedData', recordedData.length);
+    return {startTime, data: recordedData.toString('base64')};
+  }
+
+  static async buttonChanged(pin, state) {
+    return new Promise((resolve, reject) => {
+      const listener = (channel, value) => {
+        console.log('Channel ' + channel + ' value is now ' + value);
+        if(channel === pin && state === value) {
+          gpio.removeListener('change', listener);
+          resolve(value);
+        }
+      };
+      gpio.on('change', listener);
+    });
   }
 }
 
