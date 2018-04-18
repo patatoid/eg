@@ -14,7 +14,6 @@ module.exports = class AdminService {
   }
 
   static async saveCreaRecord(record) {
-    console.log('ShowCreaRecord', record);
     CreaRecords.push(record);
     AdminService.sendRecords();
   }

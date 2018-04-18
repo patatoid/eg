@@ -1,4 +1,5 @@
 const Helper = require('./helper');
+const SoundService = require('./sound.service');
 const MainServerService = require('./main.server.service');
 
 const words = [
@@ -47,18 +48,21 @@ module.exports = class CreaService {
     console.log('cycle', index);
     socket.emit('words', words[index]);
     const startTime = Date.now();
-    const duration = await Promise.race([
+    const creaRecord = await Promise.race([
       CreaService.buttonEvent(startTime),
-      Helper.delay(5)
+      Helper.delay(30)
     ]);
-    console.log('duration', duration);
-    MainServerService.send('crea-record', duration);
+    MainServerService.send('crea-record', creaRecord);
     await CreaService.creaCycle(socket, index + 1);
   }
 
   static async buttonEvent(startTime) {
     await Helper.delay(Math.random()*10);
-    return Date.now()-startTime;
+    const recordProcess = SoundService.startRecording();
+    await Helper.delay(Math.random()*2+3);
+    const recordedData = await SoundService.stopRecording(recordProcess);
+    console.log('recordedData', recordedData.length);
+    return {startTime: Date.now()-startTime, data: recordedData.toString('base64')};
   }
 }
 

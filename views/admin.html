@@ -12,7 +12,8 @@
         console.log('crea-records', records);
         document.getElementById('container').innerHTML='';
         for(let record of records){
-          document.getElementById('container').innerHTML+=record+'<br/>';
+          const base64Record = record.data;
+          document.getElementById('container').innerHTML+=record.startTime+' <audio controls src="data:audio/wav;base64,'+base64Record+'"></audio><br/>';
         }
       });
 
