@@ -35,8 +35,7 @@ module.exports = class CreaService {
   static async startCrea(socket) {
     console.log('launch crea');
     const url='http://localhost:3000/crea.html';
-    creaCurrentProcess = Helper.launchProcess(['xinit', ['-e', 'chromium-browser', '--kiosk', '--start-fullscreen', '--window-size=1920,1080', url]]);
-    //Helper.launchProcess(['sh', ['scripts/start-chromium.sh'], {env: {URL: url}}]);
+    creaCurrentProcess = Helper.launchProcess(['sh', ['./scripts/start-chromium.sh', url], {env: process.env}]);
   }
 
   static stopCrea() {
