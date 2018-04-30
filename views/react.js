@@ -28,8 +28,7 @@ socket.on('connections', connections =>
 
 class Main extends React.Component {
   render() {
-  const flows = this.props.flowList.map(flow => (<Flow flow={flow}/>));
-  console.log('flows', flows);
+  const flows = this.props.flowList.map(flow => (<Flow key={flow.title} flow={flow}/>));
   return (<div>{flows}</div>);
   }
 }
@@ -51,7 +50,7 @@ class Action extends React.Component {
     const className = `badge badge-${state.badge}`;
     const stateBadge = <span className={className}>{state.text}</span>
     return (
-      <p class="card-text">{action.description} {stateBadge}</p>
+      <p className="card-text">{action.description} {stateBadge}</p>
     );
   }
 }
@@ -59,7 +58,7 @@ class Flow extends React.Component {
   render() {
     const flow = this.props.flow;
     const title=flow.title;
-    const actions = flow.actions.map(action => <Action action={action}/>);
+    const actions = flow.actions.map(action => <Action key={action.description} action={action}/>);
     return (
     <div className="card">
       <div className="card-header">
