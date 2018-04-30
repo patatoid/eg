@@ -1,12 +1,13 @@
+const { mainFlow } = require('./action.service');
+const { io } = require('./app');
 let AdminPanelSocket = null;
 const CreaRecords = [];
 
 module.exports = class AdminService {
 
   static async startAdmin(socket) {
-  console.log('startAdmin');
-    AdminPanelSocket = socket;
-    AdminService.sendRecords();
+    console.log('startAdmin');
+    io.emit('mainFlow', mainFlow);
   }
 
   static async stopAdmin() {

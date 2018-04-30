@@ -54,7 +54,7 @@ module.exports = class CreaService {
     const cycleStartTime = Date.now();
     const creaRecord = await Promise.race([
       CreaService.buttonEvent(cycleStartTime),
-      Helper.delay(30)
+      Helper.sleep(30)
     ]);
     MainServerService.send('crea-record', creaRecord);
     await CreaService.creaCycle(socket, index + 1);
