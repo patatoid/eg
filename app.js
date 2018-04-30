@@ -10,10 +10,11 @@ SocketService.io.on('connection', function(socket) {
   socket.on('crea-connected', () => CreaService.handleCrea(socket));
   socket.on('start-crea', () => CreaService.startCrea(socket));
   socket.on('crea-record', (record) => AdminService.saveCreaRecord(record));
-  setInterval(() => socket.emit('react', Math.random()), 1000);
   socket.on('identification', id => {
     connections.setState(id, true);
     if(id === 'interface') SocketService.io.emit('mainFlow', mainFlow);
+    socket.on("begin", () => SocketService.emitSocketMessage('begin'));
+    socket.on("force", () => SocketService.emitSocketMessage('force'));
     socket.on('disconnect', () => connections.setState(id, false));
   })
 });

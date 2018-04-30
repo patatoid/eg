@@ -56,7 +56,7 @@ module.exports = class CreaService {
       CreaService.buttonEvent(cycleStartTime),
       Helper.sleep(30)
     ]);
-    MainServerService.send('crea-record', creaRecord);
+    MainServerService.emit('crea-record', creaRecord);
     await CreaService.creaCycle(socket, index + 1);
   }
 

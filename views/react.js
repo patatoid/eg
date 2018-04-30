@@ -47,11 +47,25 @@ class Action extends React.Component {
   render() {
     const action = this.props.action;
     const state = this.computeState(action.state);
+    const emit = () => socket.emit();
+    const hashes = action.description.split('#');
+    let button;
+    console.log('hashes', hashes);
+    if(hashes.length > 1) {
+      const [type, message, text] = hashes[1].split(';');
+      console.log('message', message);
+      button = (<span 
+        className="badge badge-primary" 
+        style={{cursor: "pointer"}}
+        onClick={() => socket.emit(message)}>
+        {text} </span>);
+    }
+    const description = hashes[0];
     const className = `badge badge-${state.badge}`;
     const stateBadge = <span className={className}>{state.text}</span>
     return (
       <p className="card-text" style={{margin: 0}}>
-      {action.description} {stateBadge}</p>
+      {stateBadge} {description} {button} </p>
     );
   }
 }

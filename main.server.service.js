@@ -7,7 +7,7 @@ module.exports=class MainServerService {
     return mainSocketClient;
   }
 
-  static send(channel, msg) {
+  static emit(channel, msg) {
     mainSocketClient.emit(channel, msg);
   }
 }
