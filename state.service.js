@@ -1,4 +1,4 @@
-const {io} = require('./app');
+const { SocketService } = require('./socket.service');
 
 const connectionsDefaultState = {
   'main': false,
@@ -18,7 +18,7 @@ class StateService {
   setState(key, value) {
     this.state[key] = value;
     console.log('state changed', key, value);
-    io.emit(this.socketName, this.state);
+    SocketService.io.emit(this.socketName, this.state);
   }
 
   getState(key, value) {

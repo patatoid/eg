@@ -50,7 +50,8 @@ class Action extends React.Component {
     const className = `badge badge-${state.badge}`;
     const stateBadge = <span className={className}>{state.text}</span>
     return (
-      <p className="card-text">{action.description} {stateBadge}</p>
+      <p className="card-text" style={{margin: 0}}>
+      {action.description} {stateBadge}</p>
     );
   }
 }
