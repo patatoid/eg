@@ -28,7 +28,7 @@ socket.on('connections', connections =>
 
 class Main extends React.Component {
   render() {
-  const flows = this.props.flowList.map(flow => (<Flow key={flow.title} flow={flow}/>));
+  const flows = this.props.flowList.map(flow => (<Flow key={flow.description} flow={flow}/>));
   return (<div>{flows}</div>);
   }
 }
@@ -46,7 +46,8 @@ class Action extends React.Component {
 
   render() {
     const action = this.props.action;
-    const state = this.computeState(action.state);
+    console.log('action', action);
+    const state = this.computeState(action.state || 'pending');
     const emit = () => socket.emit();
     const hashes = action.description.split('#');
     let button;
@@ -72,12 +73,12 @@ class Action extends React.Component {
 class Flow extends React.Component {
   render() {
     const flow = this.props.flow;
-    const title=flow.title;
+    const description=flow.description;
     const actions = flow.actions.map(action => <Action key={action.description} action={action}/>);
     return (
     <div className="card">
       <div className="card-header">
-        {title}
+        {description}
         </div>
         <div className="card-body">
           {actions}

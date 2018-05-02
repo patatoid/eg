@@ -64,7 +64,7 @@ class CreaService {
       timeout(5),
     ]);
     const { mainServer } = require('./server');
-    mainServer.socket.emit('crea-record', {...creaRecord, index: realIndex, words: wordsSent});
+    mainServer.socket.emit('crea-record-'+config.deviceName, {...creaRecord, index: realIndex, words: wordsSent});
     await CreaService.creaCycle(socket, startIndex, index + 1);
   }
 

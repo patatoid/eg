@@ -8,11 +8,18 @@ const { StateService, connections } = require('./state.service');
 const { mainFlow, FlowService } = require('./action.service');
 const { mainServer } = require('./server');
 
-SocketService.io.on('connection', function(socket) {
-  socket.on('crea-record', (record) => {
-    SocketService.emitSocketMessage('crea-record');
+const emitAndCompute = (socket, name) => {
+  socket.on(name, (record) => {
+    SocketService.emitSocketMessage(name);
     return AdminService.saveCreaRecord(record);
   });
+}
+
+SocketService.io.on('connection', function(socket) {
+  emitAndCompute(socket, 'crea-record-main');
+  emitAndCompute(socket, 'crea-record-crea1');
+  emitAndCompute(socket, 'crea-record-crea2');
+  emitAndCompute(socket, 'crea-record-crea3');
   socket.on('crea-connected', () => {
     SocketService.emitSocketMessage('crea-connected');
     return CreaService.handleCrea(socket);
@@ -37,5 +44,6 @@ mainServer.socket.on('screen', (type) => {
 })
 mainServer.socket.on('start-crea', () => CreaService.startCrea());
 
+console.log(mainFlow);
 setTimeout(() => FlowService.executePromises(mainFlow)
   .catch(error => console.log('error !', error)), 1000);
