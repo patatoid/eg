@@ -87,12 +87,14 @@ class Flow extends React.Component {
   }
 }
 
-
+const launchSocket = () => {
+  socket.emit('identification', 'interface');
+  socket.emit('start-admin');
+}
+socket.on('connect', () => launchSocket());
+launchSocket();
 socket.on('mainFlow', mainFlow => {
-console.log('mainFlow', mainFlow);
   ReactDOM.render(<Main flowList={mainFlow}/>,
     document.getElementById('main')
   )
 });
-socket.emit('identification', 'interface');
-socket.emit('start-admin');

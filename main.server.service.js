@@ -1,6 +1,8 @@
 const mainSocketClient = require('socket.io-client')('http://localhost:3000');
-mainSocketClient.on('connect', () => console.log('connected to mainServer'));
-mainSocketClient.emit('identification', process.env.DEVICE_NAME);
+mainSocketClient.on('connect', () => {
+  console.log('connected to main server');
+  mainSocketClient.emit('identification', process.env.DEVICE_NAME);
+});
 
 module.exports=class MainServerService {
   static getSocket() {
