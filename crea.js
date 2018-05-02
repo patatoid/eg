@@ -1,23 +1,12 @@
 const gpio = require('rpi-gpio');
+const config = require('./config');
 const Helper = require('./helper');
 const SoundService = require('./sound.service');
- 
+const words = require('./words');
+
 const CREA_BUTTON_PIN = 13;
 gpio.setup(CREA_BUTTON_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
 
-
-const words = [
-  ['mot01', 'mot02', 'mot03'],
-  ['mot11', 'mot12', 'mot13'],
-  ['mot21', 'mot22', 'mot23'],
-  ['mot31', 'mot32', 'mot33'],
-  ['mot41', 'mot42', 'mot43'],
-  ['mot51', 'mot52', 'mot53'],
-  ['mot61', 'mot62', 'mot63'],
-  ['mot71', 'mot72', 'mot73'],
-  ['mot81', 'mot82', 'mot83'],
-  ['mot91', 'mot92', 'mot93'],
-];
 
 let creaCurrentProcess = null;
 
@@ -25,7 +14,22 @@ class CreaService {
   static async handleCrea(socket) {
     console.log('starting crea');
     try {
-      await CreaService.creaCycle(socket, 0);
+      let creaStartIndex = 0;
+      switch (config.deviceName) {
+        case 'main':
+          creaStartIndex=0;
+          break;
+        case 'crea1':
+          creaStartIndex=10;
+          break;
+        case 'crea2':
+          creaStartIndex=20;
+          break;
+        case 'crea3':
+          creaStartIndex=30;
+          break;
+      }
+      await CreaService.creaCycle(socket, creaStartIndex, 0);
     } catch(e) {
       throw e;
     }
@@ -46,10 +50,13 @@ class CreaService {
     }
   }
 
-  static async creaCycle(socket, index) {
+  static async creaCycle(socket, startIndex, index) {
     if(index>=10) return CreaService.stopCrea();
     console.log('cycle', index);
-    socket.emit('words', words[index]);
+    const realIndex = startIndex + index;
+    const wordsSent = words[realIndex];
+    console.log('wordsSent', wordsSent);
+    socket.emit('words', wordsSent);
     const cycleStartTime = Date.now();
     const timeout = async (time) => { const duration = await Helper.sleep(time); return {duration: time, data: null}};
     const creaRecord = await Promise.race([
@@ -57,8 +64,8 @@ class CreaService {
       timeout(5),
     ]);
     const { mainServer } = require('./server');
-    mainServer.socket.emit('crea-record', {...creaRecord, index});
-    await CreaService.creaCycle(socket, index + 1);
+    mainServer.socket.emit('crea-record', {...creaRecord, index: realIndex, words: wordsSent});
+    await CreaService.creaCycle(socket, startIndex, index + 1);
   }
 
   static async buttonEvent(cycleStartTime) {

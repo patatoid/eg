@@ -28,7 +28,7 @@ SocketService.io.on('connection', function(socket) {
 
 
 mainServer.socket.on('connect', () => {
-  mainServer.socket.emit('identification', process.env.DEVICE_NAME);
+  mainServer.socket.emit('identification', config.deviceName);
 });
 mainServer.socket.on('screen', (type) => {
   if (type === 'berserk' ) {
