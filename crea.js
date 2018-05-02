@@ -1,7 +1,6 @@
+const gpio = require('rpi-gpio');
 const Helper = require('./helper');
 const SoundService = require('./sound.service');
-const MainServerService = require('./main.server.service');
-const gpio = require('rpi-gpio');
  
 const CREA_BUTTON_PIN = 13;
 gpio.setup(CREA_BUTTON_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
@@ -22,7 +21,7 @@ const words = [
 
 let creaCurrentProcess = null;
 
-module.exports = class CreaService {
+class CreaService {
   static async handleCrea(socket) {
     console.log('starting crea');
     try {
@@ -32,7 +31,7 @@ module.exports = class CreaService {
     }
   }
 
-  static async startCrea(socket) {
+  static startCrea() {
     console.log('launch crea');
     const url='http://localhost:3000/crea.html';
     creaCurrentProcess = Helper.launchProcess(['sh', ['./scripts/start-chromium.sh', url], {env: process.env}]);
@@ -52,23 +51,25 @@ module.exports = class CreaService {
     console.log('cycle', index);
     socket.emit('words', words[index]);
     const cycleStartTime = Date.now();
+    const timeout = async (time) => { const duration = await Helper.sleep(time); return {duration: time, data: null}};
     const creaRecord = await Promise.race([
       CreaService.buttonEvent(cycleStartTime),
-      Helper.sleep(30)
+      timeout(5),
     ]);
-    MainServerService.emit('crea-record', creaRecord);
+    const { mainServer } = require('./server');
+    mainServer.socket.emit('crea-record', {...creaRecord, index});
     await CreaService.creaCycle(socket, index + 1);
   }
 
   static async buttonEvent(cycleStartTime) {
     await CreaService.buttonChanged(CREA_BUTTON_PIN, true);
     console.log('start recording');
-    const startTime = Date.now()-cycleStartTime;
+    const duration = Date.now()-cycleStartTime;
     const recordProcess = SoundService.startRecording();
     await CreaService.buttonChanged(CREA_BUTTON_PIN, false);
     const recordedData = await SoundService.stopRecording(recordProcess);
     console.log('stop recording -> recordedData', recordedData.length);
-    return {startTime, data: recordedData.toString('base64')};
+    return {duration, data: recordedData.toString('base64')};
   }
 
   static async buttonChanged(pin, state) {
@@ -85,4 +86,4 @@ module.exports = class CreaService {
   }
 }
 
-
+module.exports = {CreaService};

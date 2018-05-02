@@ -1,16 +1,13 @@
 const { mainFlow } = require('./action.service');
+const { SocketService } = require('./socket.service');
 let AdminPanelSocket = null;
 const CreaRecords = [];
 
 module.exports = class AdminService {
   static async saveCreaRecord(record) {
+  console.log('record', record);
     CreaRecords.push(record);
-    AdminService.sendRecords();
-  }
-
-  static async sendRecords() {
-    if(!AdminPanelSocket) return;
-    AdminPanelSocket.emit('crea-records', CreaRecords);
+    SocketService.io.emit('crea-record', record);
   }
 }
 

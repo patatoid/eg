@@ -1,15 +1,19 @@
-const mainSocketClient = require('socket.io-client')('http://localhost:3000');
-mainSocketClient.on('connect', () => {
-  console.log('connected to main server');
-  mainSocketClient.emit('identification', process.env.DEVICE_NAME);
-});
+const { Helper } = require('./helper');
+const { CreaService } = require('./crea');
 
-module.exports=class MainServerService {
-  static getSocket() {
-    return mainSocketClient;
+class MainServerService {
+  constructor(hostname) {
+    this.mainSocketClient = require('socket.io-client')(`http://${hostname}:3000`);
+  }
+  get socket() {
+    return this.mainSocketClient;
   }
 
-  static emit(channel, msg) {
-    mainSocketClient.emit(channel, msg);
+  emit(channel, msg) {
+    this.mainSocketClient.emit(channel, msg);
   }
+}
+
+module.exports={
+  MainServerService
 }
