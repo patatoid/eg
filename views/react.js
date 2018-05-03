@@ -47,6 +47,8 @@ class Action extends React.Component {
   render() {
     const action = this.props.action;
     console.log('action', action);
+    if(typeof action.type != "undefined") return (<Flow flow={action}/>);
+    console.log('has no type');
     const state = this.computeState(action.state || 'pending');
     const emit = () => socket.emit();
     const hashes = action.description.split('#');
@@ -73,14 +75,24 @@ class Action extends React.Component {
 class Flow extends React.Component {
   render() {
     const flow = this.props.flow;
-    const description=flow.description;
-    const actions = flow.actions.map(action => <Action key={action.description} action={action}/>);
+    console.log('flow', flow);
+    const actions = flow.actions.map(action => <Action key={action.description} type={flow.type} action={action}/>);
+    if(flow.type==='parallel') {
     return (
-    <div className="card">
-      <div className="card-header">
-        {description}
+    <div>
+      <p className="card-text" style={{margin: 0}}>{flow.description}</p>
+      <div className='row'>
+        {actions}
+      </div>
+    </div>
+      );
+    }
+    return (
+      <div className="card">
+        <div className="card-header">
+          {flow.description}
         </div>
-        <div className="card-body">
+        <div className='card-body'>
           {actions}
         </div>
       </div>
