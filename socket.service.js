@@ -7,13 +7,13 @@ class SocketService {
     return io;
   }
 
-  static emitSocketMessage(message) {
-    socketListener.emit(message);
+  static emitSocketMessage(message, data) {
+    socketListener.emit(message, data);
   }
 
   static async waitForEvent(name) {
     return new Promise((resolve, reject) => {
-      socketListener.once(name, () => resolve());
+      socketListener.once(name, (data) => resolve(data));
     })
   }
 }

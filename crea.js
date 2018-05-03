@@ -14,22 +14,7 @@ class CreaService {
   static async handleCrea(socket) {
     console.log('starting crea');
     try {
-      let creaStartIndex = 0;
-      switch (config.deviceName) {
-        case 'main':
-          creaStartIndex=0;
-          break;
-        case 'crea1':
-          creaStartIndex=10;
-          break;
-        case 'crea2':
-          creaStartIndex=20;
-          break;
-        case 'crea3':
-          creaStartIndex=30;
-          break;
-      }
-      await CreaService.creaCycle(socket, creaStartIndex, 0);
+      await CreaService.creaCycle(socket, config.deviceName, 0);
     } catch(e) {
       throw e;
     }
@@ -50,12 +35,10 @@ class CreaService {
     }
   }
 
-  static async creaCycle(socket, startIndex, index) {
+  static async creaCycle(socket, deviceName, index) {
     if(index>=10) return CreaService.stopCrea();
     console.log('cycle', index);
-    const realIndex = startIndex + index;
-    const wordsSent = words[realIndex];
-    console.log('wordsSent', wordsSent);
+    const wordsSent = words[config.deviceName][index];
     socket.emit('words', wordsSent);
     const cycleStartTime = Date.now();
     const timeout = async (time) => { const duration = await Helper.sleep(time); return {duration: time, data: null}};
@@ -64,8 +47,8 @@ class CreaService {
       timeout(5),
     ]);
     const { mainServer } = require('./server');
-    mainServer.socket.emit('crea-record-'+config.deviceName, {...creaRecord, index: realIndex, words: wordsSent});
-    await CreaService.creaCycle(socket, startIndex, index + 1);
+    mainServer.socket.emit('crea-record-'+config.deviceName, {...creaRecord, index, words: wordsSent, deviceName});
+    await CreaService.creaCycle(socket, deviceName, index + 1);
   }
 
   static async buttonEvent(cycleStartTime) {

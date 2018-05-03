@@ -46,17 +46,13 @@ class Action extends React.Component {
 
   render() {
     const action = this.props.action;
-    console.log('action', action);
     if(typeof action.type != "undefined") return (<Flow flow={action}/>);
-    console.log('has no type');
     const state = this.computeState(action.state || 'pending');
     const emit = () => socket.emit();
     const hashes = action.description.split('#');
     let button;
-    console.log('hashes', hashes);
     if(hashes.length > 1) {
       const [type, message, text] = hashes[1].split(';');
-      console.log('message', message);
       button = (<span 
         className="badge badge-primary" 
         style={{cursor: "pointer"}}
@@ -75,7 +71,6 @@ class Action extends React.Component {
 class Flow extends React.Component {
   render() {
     const flow = this.props.flow;
-    console.log('flow', flow);
     const actions = flow.actions.map(action => <Action key={action.description} type={flow.type} action={action}/>);
     if(flow.type==='parallel') {
     return (
@@ -107,6 +102,7 @@ const launchSocket = () => {
 socket.on('connect', () => launchSocket());
 launchSocket();
 socket.on('mainFlow', mainFlow => {
+  console.log('mainFlow', mainFlow);
   ReactDOM.render(<Main flowList={mainFlow}/>,
     document.getElementById('main')
   )

@@ -8,18 +8,20 @@ const { StateService, connections } = require('./state.service');
 const { mainFlow, FlowService } = require('./action.service');
 const { mainServer } = require('./server');
 
-const emitAndCompute = (socket, name) => {
+const creaReacordSave = (socket, name) => {
   socket.on(name, (record) => {
-    SocketService.emitSocketMessage(name);
+  const recordToEmit = {deviceName: record.deviceName, index: record.index, hasData: !!record.data};
+    console.log('recordToEmit', recordToEmit)
+    SocketService.emitSocketMessage(name, recordToEmit);
     return AdminService.saveCreaRecord(record);
   });
 }
 
 SocketService.io.on('connection', function(socket) {
-  emitAndCompute(socket, 'crea-record-main');
-  emitAndCompute(socket, 'crea-record-crea1');
-  emitAndCompute(socket, 'crea-record-crea2');
-  emitAndCompute(socket, 'crea-record-crea3');
+  creaReacordSave(socket, 'crea-record-main');
+  creaReacordSave(socket, 'crea-record-crea1');
+  creaReacordSave(socket, 'crea-record-crea2');
+  creaReacordSave(socket, 'crea-record-crea3');
   socket.on('crea-connected', () => {
     SocketService.emitSocketMessage('crea-connected');
     return CreaService.handleCrea(socket);

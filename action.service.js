@@ -3,6 +3,7 @@ const SoundService = require('./sound.service');
 const DeviceService = require('./device.service');
 const { mainServer } = require('./server');
 const { SocketService } = require('./socket.service');
+const words = require('./words');
 
 const ACTION_STATE = {
   PENDING: 'pending',
@@ -42,11 +43,13 @@ class ActionService {
     this.action = action;
     this.description = description;
     this.state = ACTION_STATE.PENDING;
+    this.response = null;
   }
 
   async execute() {
     this.changeState(ACTION_STATE.STARTED);
-    await this.action();
+    this.response = await this.action();
+    console.log('this.response', this.response);
     this.changeState(ACTION_STATE.FINISHED);
   }
 
@@ -54,6 +57,16 @@ class ActionService {
     this.state = state;
     SocketService.io.emit('mainFlow', mainFlow);
   }
+}
+
+const generateCreaActions = () => {
+  const devices = Object.keys(words);
+  return devices.map(device => {
+    const deviceWords =  words[device];
+    const actions = deviceWords.map(word => 
+       new ActionService(() => SocketService.waitForEvent('crea-record-'+device), word[0]));
+    return new FlowService(`ordinateur ${device}`, actions);
+  });
 }
 
 const mainFlow = [
@@ -77,34 +90,9 @@ const mainFlow = [
   ),
   new FlowService('Enigme Crea', [
       new ActionService(() => Promise.race([Helper.sleep(600),SocketService.waitForEvent('force')]), 'Pause 10mn #button;force;Forcer#'),
-      new ActionService(() => SocketService.io.emit('start-crea'), 'Demarrage des processus pour enigme Crea'),
+      new ActionService(() => (SocketService.io.emit('start-crea'), null), 'Demarrage des processus pour enigme Crea'),
       new ActionService(() => SocketService.waitForEvent('crea-connected'), 'Crea démarré'),
-      new FlowService('Resultats', [
-        new FlowService('ordinateur main', [
-          new ActionService(() => SocketService.waitForEvent('crea-record-main'), 'mot1'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-main'), 'mot2'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-main'), 'mot3'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-main'), 'mot4'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-main'), 'mot5'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-main'), 'mot6'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-main'), 'mot7'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-main'), 'mot8'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-main'), 'mot9'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-main'), 'mot10'),
-        ]),
-        new FlowService('ordinateur crea1', [
-          new ActionService(() => SocketService.waitForEvent('crea-record-crea1'), 'mot11'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-crea1'), 'mot12'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-crea1'), 'mot13'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-crea1'), 'mot14'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-crea1'), 'mot15'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-crea1'), 'mot16'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-crea1'), 'mot17'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-crea1'), 'mot18'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-crea1'), 'mot19'),
-          new ActionService(() => SocketService.waitForEvent('crea-record-crea1'), 'mot20'),
-        ])
-      ], ACTION_TYPE.PARALLEL),
+      new FlowService('Resultats', generateCreaActions(), ACTION_TYPE.PARALLEL),
     ]
   ),
   new FlowService('Enigme Base de donnée', [
