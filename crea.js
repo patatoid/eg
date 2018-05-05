@@ -44,7 +44,7 @@ class CreaService {
     const timeout = async (time) => { const duration = await Helper.sleep(time); return {duration: time, data: null}};
     const creaRecord = await Promise.race([
       CreaService.buttonEvent(cycleStartTime),
-      timeout(5),
+      timeout(10),
     ]);
     const { mainServer } = require('./server');
     mainServer.socket.emit('crea-record-'+config.deviceName, {...creaRecord, index, words: wordsSent, deviceName});
@@ -59,7 +59,7 @@ class CreaService {
     await CreaService.buttonChanged(CREA_BUTTON_PIN, false);
     const recordedData = await SoundService.stopRecording(recordProcess);
     console.log('stop recording -> recordedData', recordedData.length);
-    return {duration, data: recordedData.toString('base64')};
+    return {duration, data: recordedData};
   }
 
   static async buttonChanged(pin, state) {
