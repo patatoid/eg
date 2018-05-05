@@ -10,7 +10,7 @@ const { mainServer } = require('./server');
 
 const creaReacordSave = (socket, name) => {
   socket.on(name, (record) => {
-  const recordToEmit = {deviceName: record.deviceName, index: record.index, hasData: !!record.data};
+  const recordToEmit = {type:'crea', deviceName: record.deviceName, index: record.index, hasData: !!record.data};
     console.log('recordToEmit', recordToEmit)
     SocketService.emitSocketMessage(name, recordToEmit);
     return AdminService.saveCreaRecord(record);
