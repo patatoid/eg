@@ -33,6 +33,22 @@ class Main extends React.Component {
   }
 }
 
+class Response extends React.Component {
+  render() {
+    const response = this.props.response;
+    console.log('response', response);
+    if(response.type !== 'crea') return null;
+    if(!response.hasData) return (<div>pas de reponse</div>)
+    const src=`crea-audio/${response.deviceName}_${response.index}`;
+    const duration = Math.round(response.duration/10)/100;
+    return (
+    <div>
+      <p>{duration}s <audio controls src={src}></audio></p>
+    </div>
+    )
+  }
+}
+
 class Action extends React.Component {
   computeState(state) {
     if (state === 'pending') {
@@ -62,9 +78,11 @@ class Action extends React.Component {
     const description = hashes[0];
     const className = `badge badge-${state.badge}`;
     const stateBadge = <span className={className}>{state.text}</span>
+    const response = action.response ? <Response response={action.response}/> : null;
     return (
-      <p className="card-text" style={{margin: 0}}>
+      <div><p className="card-text" style={{margin: 0}}>
       {stateBadge} {description} {button} </p>
+      {response}</div>
     );
   }
 }

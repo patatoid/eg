@@ -22,7 +22,7 @@
     var socket = io();
     socket.emit('crea-connected');
     socket.on('words', function(words){
-      for(var i=0; i<words.length; i++){
+      for(var i=1; i<words.length; i++){
         document.getElementById(i.toString()).innerHTML=words[i];
       }
     });
@@ -31,9 +31,9 @@
 
 <body>
   <div class="container">
-    <h1 style="color:black" id="0"></h1>
     <h1 style="color:black" id="1"></h1>
     <h1 style="color:black" id="2"></h1>
+    <h1 style="color:black" id="3"></h1>
     </div>
   </body>
 </html>
