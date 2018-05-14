@@ -37,8 +37,8 @@ class CreaService {
 
   static async creaCycle(socket, deviceName, index) {
     if(index>=10) return CreaService.stopCrea();
-    console.log('cycle', index);
     const wordsSent = words[config.deviceName][index];
+    console.log('cycle', index, wordsSent);
     socket.emit('words', wordsSent);
     const cycleStartTime = Date.now();
     const timeout = async (time) => { const duration = await Helper.sleep(time); return {duration: time, data: null}};

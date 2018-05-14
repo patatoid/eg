@@ -41,7 +41,7 @@ mainServer.socket.on('connect', () => {
 });
 mainServer.socket.on('screen', (type) => {
   if (type === 'berserk' ) {
-    Helper.launchProcess('scripts/berserk.sh');
+    Helper.launchProcess(['sh', ['./scripts/berserk.sh']]);
   }
 })
 mainServer.socket.on('start-crea', () => CreaService.startCrea());
