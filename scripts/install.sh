@@ -7,12 +7,8 @@ sudo apt-get install -y nodejs
 sudo apt-get install libasound2-dev --yes
 sudo apt-get install git tmux vim --yes
 git clone https://bitbucket.org/leosayous21/escape-game.git
-cd escape-game
+cd ./escape-game
 npm install
-<<<<<<< HEAD
-=======
-mkdir records
->>>>>>> 810b281189f5d6a59588ffee0d7cb7445697d0b4
-echo "export DEVICE_NAME='crea1'" >> ~/.bashrc
-echo "export MAIN_SERVER='192.168.0.2'" >> ~/.bashrc
+echo "export DEVICE_NAME='elec'" >> ~/.bashrc
+echo "export MAIN_SERVER='192.168.0.6'" >> ~/.bashrc
 

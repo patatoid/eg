@@ -46,6 +46,18 @@ mainServer.socket.on('screen', (type) => {
 })
 mainServer.socket.on('start-crea', () => CreaService.startCrea());
 
-console.log(mainFlow);
+
+if(config.deviceName === 'elec') {
+  const ELEC_TRIGGER_PIN = 3;
+  Helper.declareGpioPin(ELEC_TRIGGER_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+  Helper.listenOnChange((pin, state)=> {
+    if(pin === ELEC_TRIGGER_PIN) {
+      if(state === true) {
+        mainServer.socket.emit('elec-breaker-on');
+      }
+    }
+  })
+}
+
 setTimeout(() => FlowService.executePromises(mainFlow)
   .catch(error => console.log('error !', error)), 1000);

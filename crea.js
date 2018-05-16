@@ -5,8 +5,7 @@ const SoundService = require('./sound.service');
 const words = require('./words');
 
 const CREA_BUTTON_PIN = 13;
-gpio.setup(CREA_BUTTON_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
-
+Helper.declareGpioPin(CREA_BUTTON_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
 
 let creaCurrentProcess = null;
 
@@ -52,27 +51,14 @@ class CreaService {
   }
 
   static async buttonEvent(cycleStartTime) {
-    await CreaService.buttonChanged(CREA_BUTTON_PIN, true);
+    await Helper.buttonChanged(CREA_BUTTON_PIN, true);
     console.log('start recording');
     const duration = Date.now()-cycleStartTime;
     const recordProcess = SoundService.startRecording();
-    await CreaService.buttonChanged(CREA_BUTTON_PIN, false);
+    await Helper.buttonChanged(CREA_BUTTON_PIN, false);
     const recordedData = await SoundService.stopRecording(recordProcess);
     console.log('stop recording -> recordedData', recordedData.length);
     return {duration, data: recordedData};
-  }
-
-  static async buttonChanged(pin, state) {
-    return new Promise((resolve, reject) => {
-      const listener = (channel, value) => {
-        console.log('Channel ' + channel + ' value is now ' + value);
-        if(channel === pin && state === value) {
-          gpio.removeListener('change', listener);
-          resolve(value);
-        }
-      };
-      gpio.on('change', listener);
-    });
   }
 }
 

@@ -25,7 +25,6 @@ class DeviceService {
   static get GYRO() { return GYRO; }
   static get MAGNET_CREA_KEY() { return MAGNET_CREA_KEY; }
 
-
   static async resetState() {
    for(let device in defaultState) {
     await DeviceService.change(device, defaultState[device]);
@@ -50,7 +49,6 @@ class DeviceService {
       })
     });
   }
-
 }
 
 module.exports = DeviceService;
