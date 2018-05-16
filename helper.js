@@ -12,8 +12,8 @@ module.exports=class Helper {
     return spawn(...process);
   }
 
-  static declareGpioPin(pint, dir, changedStrategy) {
-    gpio.setup(CREA_BUTTON_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+  static declareGpioPin(pin, dir, changedStrategy) {
+    gpio.setup(pin, dir, changedStrategy);
   }
 
   static listenOnChange(listener) {

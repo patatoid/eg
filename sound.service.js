@@ -10,9 +10,10 @@ class SoundService {
   static get siren() { return siren; }
 
   static play(sound) {
-   const player = new Player(sound); 
+   const player = new Player(sound);
+   player.setVolume(1);
    player.play();
-   player.on('error', () => {})
+   player.on('error', (data) => {console.log('error sound service', data)})
   }
 
   static startRecording() {
