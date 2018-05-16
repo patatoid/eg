@@ -49,11 +49,13 @@ mainServer.socket.on('start-crea', () => CreaService.startCrea());
 
 
 if(config.deviceName === 'elec') {
-  const ELEC_TRIGGER_PIN = 3;
+  const ELEC_TRIGGER_PIN = 37;
   Helper.declareGpioPin(ELEC_TRIGGER_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+ console.log('declare pin');
   Helper.listenOnChange((pin, state)=> {
     if(pin === ELEC_TRIGGER_PIN) {
-      if(state === true) {
+      if(state) {
+	console.log('elec-breaker-on');
         mainServer.socket.emit('elec-breaker-on');
       }
     }
