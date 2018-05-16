@@ -75,9 +75,9 @@ const mainFlow = [
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_ENTRANCE), 'deblocage porte'),
       new ActionService(() => Helper.sleep(5), '5s fermeture porte'),
       new ActionService(() => DeviceService.on(DeviceService.MAGNET_LOCK), 'verouillage porte'),
+      new ActionService(() => DeviceService.off(DeviceService.GLOBAL_LIGHT), 'extinction lumière globale'),
       new ActionService(() => SoundService.play(SoundService.siren), 'sirene'),
       new ActionService(() => (SocketService.io.emit('screen', 'berserk'), null), 'Ecrans berserk'),
-      new ActionService(() => DeviceService.off(DeviceService.GLOBAL_LIGHT), 'extinction lumière globale'),
       new ActionService(() => DeviceService.on(DeviceService.GYRO), 'allumage gyrophare'),
       new ActionService(() => DeviceService.on(DeviceService.SMALL_ELEC_LIGHT), 'allumage veilleuse elec')
     ]
