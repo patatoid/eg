@@ -83,7 +83,8 @@ const mainFlow = [
     ]
   ),
   new FlowService('Enigme Elec', [
-      new ActionService(() => Promise.race([Helper.sleep(100),SocketService.waitForEvent('force')]), 'En attente manipulation coffret electrique joueur #button;force;Forcer#'),
+      new ActionService(() => Promise.race([SocketService.waitForEvent('elec-breaker-on'),SocketService.waitForEvent('force')]), 'En attente manipulation coffret electrique joueur #button;force;Forcer#'),
+      new ActionService(() => (SocketService.io.emit('screen', 'elec_restored'), null), 'Ecrans backup generator restored'),
       new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'rallumage lumière globale'),
       new ActionService(() => DeviceService.off(DeviceService.GYRO), 'extinction gyrophare'),
     ]

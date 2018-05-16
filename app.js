@@ -27,8 +27,9 @@ SocketService.io.on('connection', function(socket) {
     SocketService.emitSocketMessage('crea-connected');
     return CreaService.handleCrea(socket);
   });
-  socket.on("begin", () => SocketService.emitSocketMessage('begin'));
-  socket.on("force", () => SocketService.emitSocketMessage('force'));
+  socket.on('begin', () => SocketService.emitSocketMessage('begin'));
+  socket.on('force', () => SocketService.emitSocketMessage('force'));
+  socket.on('elec-breaker-on', () => SocketService.emitSocketMessage('elec-breaker-on'));
   socket.on('identification', id => {
     connections.setState(id, true);
     if(id === 'interface') SocketService.io.emit('mainFlow', mainFlow);
@@ -41,9 +42,7 @@ mainServer.socket.on('connect', () => {
   mainServer.socket.emit('identification', config.deviceName);
 });
 mainServer.socket.on('screen', (type) => {
-  if (type === 'berserk' ) {
-    Helper.launchProcess(['sh', ['./scripts/berserk.sh']]);
-  }
+  Helper.launchProcess(['sh', [`./scripts/${type}.sh`]]);
 })
 mainServer.socket.on('start-crea', () => CreaService.startCrea());
 
