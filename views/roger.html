@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Escape Game - Roger Moore</title>
+    <script src="react/react.development.js"></script>
+    <script src="react/react-dom.development.js"></script>
+    <script src="react/babel.min.js"></script>
+    <script src="bootstrap/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="roger.css">
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script> var socket = io(); </script>
+    <script src="roger.js" type="text/babel"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="item">
+        <p>identifiant:</p>
+        <input class="input" type="text"/>
+      </div>
+      <div class="item">
+        <p>mot de passe:</p>
+        <input class="input" type="text"/>
+      </div>
+      <div class="item">
+        <button class="connection">Connexion</button>
+      </div>
+    </div>
+  </body>
+</html>

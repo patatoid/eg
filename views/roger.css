@@ -1,0 +1,43 @@
+body {
+  background-color: black;
+}
+
+p {
+  color: white;
+  font-family: "Monaco";
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.container {
+  width: 300px;
+  height: 300px;
+  border: 1px solid white;
+  margin: auto;
+  margin-top: 400px;
+  padding: 30px;
+}
+
+.item {
+  margin-top: 20px;
+}
+
+.input {
+  background-color: black;
+  width: 100%;
+  color: white;
+  border: 1px solid white;
+  font-family: "Monaco";
+  font-size: 12px;
+}
+
+.connection {
+  margin-top: 15px;
+  height: 28px;
+  color: white;
+  background-color: black;
+  border: 1px solid white;
+  font-family: "Monaco";
+  font-size: 12px;
+  cursor: pointer;
+}
