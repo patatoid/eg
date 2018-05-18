@@ -7,8 +7,6 @@ const words = require('./words');
 const CREA_BUTTON_PIN = 13;
 Helper.declareGpioPin(CREA_BUTTON_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
 
-let creaCurrentProcess = null;
-
 class CreaService {
   static async handleCrea(socket) {
     console.log('starting crea');
@@ -21,17 +19,12 @@ class CreaService {
 
   static startCrea() {
     console.log('launch crea');
-    const url='http://localhost:3000/crea.html';
-    creaCurrentProcess = Helper.launchProcess(['sh', ['./scripts/start-chromium.sh', url], {env: process.env}]);
+    Helper.openChromium('crea.html');
   }
 
   static stopCrea() {
     console.log('Stop crea window');
-    if(creaCurrentProcess) {
-      creaCurrentProcess.stdin.pause();
-      creaCurrentProcess.kill();
-      creaCurrentProcess = null;
-    }
+    Helper.closeChromium();
   }
 
   static async creaCycle(socket, deviceName, index) {

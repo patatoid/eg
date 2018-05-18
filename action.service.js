@@ -98,7 +98,7 @@ const mainFlow = [
   ),
   new FlowService('Enigme Base de donnée', [
       new ActionService(() => Promise.race([Helper.sleep(600),SocketService.waitForEvent('force')]), 'Pause 10mn #button;force;Forcer#'),
-      new ActionService(() => true, 'Allumage ecran Roger Moore sur identifiant de connection'),
+      new ActionService(() => Helper.openChromium('roger.html'), 'Allumage ecran Roger Moore sur identifiant de connection'),
       new ActionService(() => true, 'En attente dévérouillage session'),
       new ActionService(() => true, 'En attente lecture video'),
     ]
