@@ -1,5 +1,5 @@
 const execa = require('execa');
-const gpio = require('rpi-gpio');
+const { gpio } = require('./gpio');
 const config = require('./config');
 const AdminService = require('./admin');
 const Helper = require('./helper');

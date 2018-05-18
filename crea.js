@@ -1,6 +1,6 @@
-const gpio = require('rpi-gpio');
 const config = require('./config');
 const Helper = require('./helper');
+const { gpio } = require('./gpio');
 const SoundService = require('./sound.service');
 const words = require('./words');
 

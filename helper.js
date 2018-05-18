@@ -1,4 +1,4 @@
-const gpio = require('rpi-gpio');
+const { gpio } = require('./gpio');
 const { spawn } = require('child_process');
 
 module.exports=class Helper {
