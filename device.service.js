@@ -48,7 +48,6 @@ class DeviceService {
       const process = Helper.launchProcess(['sudo', ['scripts/chacon_send/chacon_send', '0', '18922461', device, state]]);
       process.on('close', (code) => {
         if(code === 0) resolve();
-        else reject();
       })
     });
   }

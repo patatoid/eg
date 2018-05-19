@@ -39,16 +39,19 @@ class FlowService {
 }
 
 class ActionService {
-  constructor(action, description) {
+  constructor(action, description, { force=false } = {}) {
     this.action = action;
     this.description = description;
     this.state = ACTION_STATE.PENDING;
+    this.force = force;
     this.response = null;
+    this.startDate = null;
   }
 
   async execute() {
     this.changeState(ACTION_STATE.STARTED);
-    this.response = await this.action();
+    this.startDate = Date.now();
+    this.response = await Promise.race([this.action(), SocketService.waitForEvent('force')]);
     console.log('this.response', this.response);
     this.changeState(ACTION_STATE.FINISHED);
   }
@@ -79,7 +82,7 @@ const generateWasonTrainingActions = () => {
 }
 const mainFlow = [
   new FlowService('Mise en situation', [
-      new ActionService(() => SocketService.waitForEvent('begin'), 'Attente demarrage #button;begin;Demarrer#'),
+      new ActionService(() => Helper.wait(), 'Attente demarrage', { force: 'Demarrer' }),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_ENTRANCE), 'deblocage porte'),
       new ActionService(() => Helper.sleep(5), '5s fermeture porte'),
       new ActionService(() => DeviceService.on(DeviceService.MAGNET_LOCK), 'verouillage porte'),
@@ -91,7 +94,7 @@ const mainFlow = [
     ]
   ),
   new FlowService('Enigme Elec', [
-      new ActionService(() => Promise.race([SocketService.waitForEvent('elec-breaker-on'),SocketService.waitForEvent('force')]), 'En attente manipulation coffret electrique joueur #button;force;Forcer#'),
+      new ActionService(() => SocketService.waitForEvent('elec-breaker-on'), 'En attente manipulation coffret electrique joueur'),
       new ActionService(() => (SocketService.io.emit('screen', 'elec_restored'), null), 'Ecrans backup generator restored'),
       new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'rallumage lumière globale'),
       new ActionService(() => true, 'IA crazy'),
@@ -108,13 +111,13 @@ const mainFlow = [
     ]
   ),
   new FlowService('Enigme Base de donnée et ordi central', [
-      new ActionService(() => SocketService.waitForEvent('force'), 'Attente déclenchement par Game Master #button;force;Déclencher#'),
+      new ActionService(() => Helper.wait(), 'Attente déclenchement par Game Master', { force: 'Déclencher' }),
       new ActionService(() => Helper.openChromium('roger.html'), 'Allumage ecran Roger Moore sur identifiant de connection'),
       new ActionService(() => SocketService.waitForEvent('session-opened'), 'En attente dévérouillage session'),
     ]
   ),
   new FlowService('Enigme 4 clés', [
-      new ActionService(() => Promise.race([Helper.sleep(600),SocketService.waitForEvent('force')]), 'Attente insertion 4 clés #button;force;Forcer#'),
+      new ActionService(() => SocketService.waitForEvent('keys-inserted'), 'Attente insertion 4 clés'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_2), 'Ouverture placard 2'),
       new ActionService(() => true, 'Son placard débloqué'),
     ]
@@ -131,8 +134,8 @@ const mainFlow = [
       new ActionService(() => (SocketService.io.emit('start-wason'), null), 'Demarrage processus wason'),
       new ActionService(() => SocketService.waitForEvent('wason-started'), 'processus démarrés'),
       new ActionService(() => true, 'IA wason mesure réelle'),
-      new ActionService(() => SocketService.waitForEvent('force'), 'Attente insertion fusible 1'),
-      new ActionService(() => SocketService.waitForEvent('force'), 'Attente insertion fusible 2'),
+      new ActionService(() => Helper.wait(), 'Attente insertion fusible 1'),
+      new ActionService(() => Helper.wait(), 'Attente insertion fusible 2'),
       new ActionService(() => true, 'IA quel reacteur éteindre ?'),
       new ActionService(() => true, 'Attente choix reacteur'),
       new ActionService(() => true, 'Déverouillage porte'),

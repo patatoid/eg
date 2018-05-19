@@ -36,7 +36,6 @@ class Main extends React.Component {
 class Response extends React.Component {
   render() {
     const response = this.props.response;
-    console.log('response', response);
     if(response.type !== 'crea') return null;
     if(!response.hasData) return (<div>pas de reponse</div>)
     const src=`crea-audio/${response.deviceName}_${response.index}`;
@@ -50,6 +49,10 @@ class Response extends React.Component {
 }
 
 class Action extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {showButton: props.action.force};
+  }
   computeState(state) {
     if (state === 'pending') {
       return {badge: 'secondary', text: 'en attente'};
@@ -64,20 +67,14 @@ class Action extends React.Component {
     const action = this.props.action;
     if(typeof action.type != "undefined") return (<Flow flow={action}/>);
     const state = this.computeState(action.state || 'pending');
-    const emit = () => socket.emit();
-    const hashes = action.description.split('#');
-    let button;
-    if(hashes.length > 1) {
-      const [type, message, text] = hashes[1].split(';');
-      button = (<span 
-        className="badge badge-primary" 
-        style={{cursor: "pointer"}}
-        onClick={() => socket.emit(message)}>
-        {text} </span>);
-    }
-    const description = hashes[0];
+    const button = (<span 
+        className="badge badge-primary"
+        style={{cursor: "pointer", visibility: (this.state.showButton ? 'visible' : 'hidden')}}
+        onClick={() => socket.emit('force')}> {action.force || 'Forcer'} </span>);
+    const description = action.description;
     const className = `badge badge-${state.badge}`;
-    const stateBadge = <span className={className}>{state.text}</span>
+    const showButton = () => this.setState({showButton: !this.state.showButton});
+    const stateBadge = <span className={className} onClick={() => showButton()}>{state.text}</span>
     const response = action.response ? <Response response={action.response}/> : null;
     return (
       <div><p className="card-text" style={{margin: 0}}>

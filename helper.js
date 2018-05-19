@@ -8,6 +8,10 @@ module.exports=class Helper {
     });
   }
 
+  static async wait() {
+    return new Promise((resolve, reject) => null);
+  }
+
   static launchProcess(process) {
     return spawn(...process);
   }
