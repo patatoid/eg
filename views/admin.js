@@ -36,6 +36,7 @@ class Main extends React.Component {
 class Response extends React.Component {
   render() {
     const response = this.props.response;
+    console.log('response', response);
     if(response.type !== 'crea') return null;
     if(!response.hasData) return (<div>pas de reponse</div>)
     const src=`crea-audio/${response.deviceName}_${response.index}`;
