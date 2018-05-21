@@ -1,3 +1,4 @@
+moment.locale('fr');
 
 class Connections extends React.Component {
   render() {
@@ -54,20 +55,21 @@ class Action extends React.Component {
     super(props)
     this.state = {showButton: props.action.force};
   }
-  computeState(state) {
+  computeState(state, _startTime) {
+    const startTime = _startTime ? moment(_startTime).format('LTS').toString() : ' ';
     if (state === 'pending') {
       return {badge: 'secondary', text: 'en attente'};
     } else if (state === 'started') {
-      return {badge: 'warning', text: 'en cours'};
+      return {badge: 'warning', text: 'demarré à '+startTime};
     } else if (state === 'finished') {
-      return {badge: 'success', text: 'finis'};
+      return {badge: 'success', text:startTime};
     }
   }
 
   render() {
     const action = this.props.action;
     if(typeof action.type != "undefined") return (<Flow flow={action}/>);
-    const state = this.computeState(action.state || 'pending');
+    const state = this.computeState(action.state || 'pending', action.startTime);
     const button = (<span 
         className="badge badge-primary"
         style={{cursor: "pointer", visibility: (this.state.showButton ? 'visible' : 'hidden')}}
@@ -75,7 +77,8 @@ class Action extends React.Component {
     const description = action.description;
     const className = `badge badge-${state.badge}`;
     const showButton = () => this.setState({showButton: !this.state.showButton});
-    const stateBadge = <span className={className} onClick={() => showButton()}>{state.text}</span>
+    const stateBadge = <span className={className} 
+                             onClick={() => showButton()} >{state.text}</span>
     const response = action.response ? <Response response={action.response}/> : null;
     return (
       <div><p className="card-text" style={{margin: 0}}>

@@ -45,12 +45,12 @@ class ActionService {
     this.state = ACTION_STATE.PENDING;
     this.force = force;
     this.response = null;
-    this.startDate = null;
+    this.startTime = null;
   }
 
   async execute() {
+    this.startTime = Date.now();
     this.changeState(ACTION_STATE.STARTED);
-    this.startDate = Date.now();
     this.response = await Promise.race([this.action(), SocketService.waitForEvent('force')]);
     console.log('this.response', this.response);
     this.changeState(ACTION_STATE.FINISHED);
