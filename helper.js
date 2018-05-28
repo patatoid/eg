@@ -1,4 +1,4 @@
-const gpio = require('rpi-gpio');
+const { gpio } = require('./gpio');
 const { spawn } = require('child_process');
 
 module.exports=class Helper {
@@ -8,8 +8,20 @@ module.exports=class Helper {
     });
   }
 
+  static async wait() {
+    return new Promise((resolve, reject) => null);
+  }
+
   static launchProcess(process) {
     return spawn(...process);
+  }
+
+  static openChromium(url) {
+    Helper.launchProcess(['sh', ['./scripts/start-chromium.sh', `http://localhost:3000/${url}`], {env: process.env}])
+  }
+
+  static closeChromium() {
+    Herlper.launchProcess(['killall', ['chromium-browser']]);
   }
 
   static declareGpioPin(pin, dir, changedStrategy) {

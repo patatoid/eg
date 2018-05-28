@@ -1,5 +1,5 @@
 const execa = require('execa');
-const gpio = require('rpi-gpio');
+const { gpio } = require('./gpio');
 const config = require('./config');
 const AdminService = require('./admin');
 const Helper = require('./helper');
@@ -8,6 +8,7 @@ const { CreaService } = require('./crea');
 const { StateService, connections } = require('./state.service');
 const { mainFlow, FlowService } = require('./action.service');
 const { mainServer } = require('./server');
+const { KeysService } = require('./keys');
 
 const creaReacordSave = (socket, name) => {
   socket.on(name, (record) => {
@@ -19,17 +20,22 @@ const creaReacordSave = (socket, name) => {
 }
 
 SocketService.io.on('connection', function(socket) {
+  const transfere = (message) => socket.on(message, () => SocketService.emitSocketMessage(message));
   creaReacordSave(socket, 'crea-record-main');
   creaReacordSave(socket, 'crea-record-crea1');
   creaReacordSave(socket, 'crea-record-crea2');
   creaReacordSave(socket, 'crea-record-crea3');
+  transfere('force');
+  transfere('session-opened');
+  transfere('keys-inserted');
+  transfere('elec-breaker-on');
+  socket.on('key', (index) => {
+    KeysService.saveKey(index);
+  });
   socket.on('crea-connected', () => {
     SocketService.emitSocketMessage('crea-connected');
     return CreaService.handleCrea(socket);
   });
-  socket.on('begin', () => SocketService.emitSocketMessage('begin'));
-  socket.on('force', () => SocketService.emitSocketMessage('force'));
-  socket.on('elec-breaker-on', () => SocketService.emitSocketMessage('elec-breaker-on'));
   socket.on('identification', id => {
     connections.setState(id, true);
     if(id === 'interface') SocketService.io.emit('mainFlow', mainFlow);

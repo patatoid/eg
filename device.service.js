@@ -7,14 +7,16 @@ const MAGNET_LOCK=1;
 const GLOBAL_LIGHT=2;
 const SMALL_ELEC_LIGHT=3;
 const GYRO=4;
-const MAGNET_CREA_KEY=5;
+const MAGNET_CLOSET_1=5;
+const MAGNET_CLOSET_2=6;
 const defaultState = {
   MAGNET_ENTRANCE: ON,
   MAGNET_LOCK: OFF,
   GLOBAL_LIGHT: ON,
   SMALL_ELEC_LIGHT: OFF,
   GYRO: OFF,
-  MAGNET_CREA_KEY: OFF,
+  MAGNET_CLOSET_1: ON,
+  MAGNET_CLOSET_2: ON,
 };
 
 class DeviceService {
@@ -23,7 +25,8 @@ class DeviceService {
   static get GLOBAL_LIGHT() { return GLOBAL_LIGHT; }
   static get SMALL_ELEC_LIGHT() { return SMALL_ELEC_LIGHT; }
   static get GYRO() { return GYRO; }
-  static get MAGNET_CREA_KEY() { return MAGNET_CREA_KEY; }
+  static get MAGNET_CLOSET_1() { return MAGNET_CLOSET_1; }
+  static get MAGNET_CLOSET_2() { return MAGNET_CLOSET_2; }
 
   static async resetState() {
    for(let device in defaultState) {
@@ -45,7 +48,6 @@ class DeviceService {
       const process = Helper.launchProcess(['sudo', ['scripts/chacon_send/chacon_send', '0', '18922461', device, state]]);
       process.on('close', (code) => {
         if(code === 0) resolve();
-        else reject();
       })
     });
   }

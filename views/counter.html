@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Escape Game - Roger Moore</title>
+    <script src="react/react.development.js"></script>
+    <script src="react/react-dom.development.js"></script>
+    <script src="react/babel.min.js"></script>
+    <script src="bootstrap/bootstrap.min.js"></script>
+    <script src="moment/moment-with-locales.js"></script>
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="roger.css">
+    <style>
+      body { background-color: black; }
+      #timer { margin:auto; }
+      p {
+        margin: auto;
+        margin-top: 390px;
+        color: #D12B2C;
+        font-family: 'Monaco';
+        font-size: 200px;
+        width: 1080px;
+      }
+    </style>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script> var socket = io(); </script>
+  </head>
+  <body>
+    <div id="timer">
+    </div>
+  <script type="text/babel">
+    var startTime = 0;
+    var stopped = false;
+    socket.on('counter-start', (_startTime) => {
+       startTime = Date.now();
+       var stopped = false;
+    });
+  socket.on('counter-end', (endTime) => { stopped=true });
+  socket.on('reset', ()=>{ stopper=false; startTime =0;})
+  class Timer extends React.Component {
+    render() {
+      if(startTime == 0) return <p></p>
+      const duration = Date.now() - startTime;
+      var secondes = Math.round(duration % 60000)/1000 ;
+      if (secondes < 10) secondes='0'+secondes;
+      var minutes = Math.floor(duration/60000 % 60);
+      if (minutes < 10) minutes='0'+minutes;
+      return (<p>{minutes}:{String(secondes).replace('.',':')}</p>);
+    }
+  }
+   const interval = setInterval(() => {
+     if(startTime === 0) return;
+      ReactDOM.render(
+        <Timer/>,
+        document.getElementById('timer')
+      )
+   }, 50);
+  </script>
+  </body>
+</html>
