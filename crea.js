@@ -4,7 +4,12 @@ const Helper = require('./helper');
 const SoundService = require('./sound.service');
 const words = require('./words');
 
-const CREA_BUTTON_PIN = 13;
+const CREA_BUTTON_PIN = 22;
+const WASON_LEARING_BUTTON_1_PIN = 13;
+const WASON_LEARING_BUTTON_2_PIN = 15;
+const WASON_LEARING_BUTTON_3_PIN = 16;
+const WASON_LEARING_BUTTON_4_PIN = 18;
+
 Helper.declareGpioPin(CREA_BUTTON_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
 
 let creaCurrentProcess = null;
