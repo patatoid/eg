@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Escape Game - Roger Moore</title>
+  <style>
+    .container-wrap {
+      display:flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+    .reactor {
+      width: 900px;
+      height: 480px;
+      margin-top: 60px;
+      border: 1px solid black;
+    }
+    .selected {
+      border: 2px solid green;
+      border-radius: 20px;
+    }
+  </style>
+    <script src="react/react.development.js"></script>
+    <script src="react/react-dom.development.js"></script>
+    <script src="react/babel.min.js"></script>
+    <script src="bootstrap/bootstrap.min.js"></script>
+    <script src="moment/moment-with-locales.js"></script>
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="custom/navbar.css">
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script> var socket = io(); </script>
+    <script src="wason.js" type="text/babel"></script>
+  </head>
+  <body>
+    <div id="main" class="container-fluid"></div>
+  </body>
+</html>

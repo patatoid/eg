@@ -5,6 +5,7 @@ const AdminService = require('./admin');
 const Helper = require('./helper');
 const { SocketService } = require('./socket.service');
 const { CreaService } = require('./crea');
+const { WasonService } = require('./wason');
 const { StateService, connections } = require('./state.service');
 const { mainFlow, FlowService } = require('./action.service');
 const { mainServer } = require('./server');
@@ -20,6 +21,7 @@ const creaReacordSave = (socket, name) => {
 }
 
 SocketService.io.on('connection', function(socket) {
+console.log('connection');
   const transfere = (message) => socket.on(message, () => SocketService.emitSocketMessage(message));
   creaReacordSave(socket, 'crea-record-main');
   creaReacordSave(socket, 'crea-record-crea1');
@@ -31,6 +33,11 @@ SocketService.io.on('connection', function(socket) {
   transfere('elec-breaker-on');
   socket.on('key', (index) => {
     KeysService.saveKey(index);
+  });
+  socket.on('wason-connected', () => {
+  console.log('wason-connected');
+    SocketService.emitSocketMessage('wason-connected');
+    return WasonService.handleWasonLearning(socket);
   });
   socket.on('crea-connected', () => {
     SocketService.emitSocketMessage('crea-connected');
@@ -51,6 +58,7 @@ mainServer.socket.on('screen', (type) => {
   Helper.launchProcess(['sh', [`./scripts/${type}.sh`]]);
 })
 mainServer.socket.on('start-crea', () => CreaService.startCrea());
+mainServer.socket.on('start-wason-training', () => WasonService.startWason());
 
 
 if(config.deviceName === 'elec') {

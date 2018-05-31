@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const { gpio } = require('./gpio');
 const { spawn } = require('child_process');
 
@@ -21,7 +22,7 @@ module.exports=class Helper {
   }
 
   static closeChromium() {
-    Herlper.launchProcess(['killall', ['chromium-browser']]);
+    Helper.launchProcess(['killall', ['chromium-browser']]);
   }
 
   static declareGpioPin(pin, dir, changedStrategy) {
@@ -39,6 +40,19 @@ module.exports=class Helper {
         if(channel === pin && state === value) {
           gpio.removeListener('change', listener);
           resolve(value);
+        }
+      };
+      gpio.on('change', listener);
+    });
+  }
+  static async buttonWasonChanged(pins, state) {
+    return new Promise((resolve, reject) => {
+      const listener = (channel, value) => {
+        console.log('wason -> Channel ' + channel + ' value is now ' + value);
+        console.log('pins', pins);
+        if(_.includes(pins, channel)) {
+          gpio.removeListener('change', listener);
+          if(value === state) resolve({channel, value});
         }
       };
       gpio.on('change', listener);

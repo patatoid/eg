@@ -25,8 +25,7 @@ class SoundService {
     if(process) process.kill();
     return new Promise((resolve, reject) => {
       fs.readFile(recordPath, (err, data) => {
-        if (err) reject(err);
-          console.log(data.length);
+        if (err) resolve('error');
           resolve(data);
       });
     });

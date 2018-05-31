@@ -1,3 +1,5 @@
+#!/bin/bash
+set -e
 sudo chmod 666 /dev/tty1
 dmesg -k > /dev/tty1
 printf '
