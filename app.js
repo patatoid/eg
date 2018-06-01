@@ -1,7 +1,7 @@
 const execa = require('execa');
 const { gpio } = require('./gpio');
 const config = require('./config');
-const AdminService = require('./admin');
+const { AdminService } = require('./admin');
 const Helper = require('./helper');
 const { SocketService } = require('./socket.service');
 const { CreaService } = require('./crea');

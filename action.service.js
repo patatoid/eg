@@ -81,9 +81,21 @@ const generateWasonTrainingActions = () => {
   });
 }
 const mainFlow = [
+  new FlowService('Reset Etat', [
+      new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'Allumage lumière globale'),
+      new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
+      new ActionService(() => DeviceService.on(DeviceService.MAGNET_ENTRANCE), 'maintient porte ouverte'),
+      new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_1), 'Ouverture placard 1'),
+      new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_2), 'Ouverture placard 2'),
+  ]),
+  new FlowService('Setup', [
+      new ActionService(() => Helper.wait(), 'Attente manipulation du game master', { force: 'Effectué' }),
+      new ActionService(() => DeviceService.on(DeviceService.MAGNET_CLOSET_1), 'verrouillage placard 1'),
+      new ActionService(() => DeviceService.on(DeviceService.MAGNET_CLOSET_2), 'verrouillage placard 2'),
+  ]),
   new FlowService('Mise en situation', [
       new ActionService(() => Helper.wait(), 'Attente demarrage', { force: 'Demarrer' }),
-      new ActionService(() => DeviceService.off(DeviceService.MAGNET_ENTRANCE), 'deblocage porte'),
+      new ActionService(() => DeviceService.off(DeviceService.MAGNET_ENTRANCE), 'fermeture porte'),
       new ActionService(() => Helper.sleep(5), '5s fermeture porte'),
       new ActionService(() => DeviceService.on(DeviceService.MAGNET_LOCK), 'verouillage porte'),
       new ActionService(() => DeviceService.off(DeviceService.GLOBAL_LIGHT), 'extinction lumière globale'),
@@ -125,7 +137,7 @@ const mainFlow = [
   ),
   new FlowService('Enigme Wason entrainement', [
       new ActionService(() => (SocketService.io.emit('start-wason-training'), null), 'Demarrage des processus pour enigme wason entrainement'),
-      new ActionService(() => SocketService.waitForEvent('wason-training-started'), 'processus démarrés'),
+      new ActionService(() => SocketService.waitForEvent('wason-connected'), 'processus démarrés'),
       new FlowService('Resultats', generateWasonTrainingActions(), ACTION_TYPE.PARALLEL),
       new ActionService(() => true, 'IA wason entrainement terminé'),
       new ActionService(() => (SocketService.io.emit('close-wason-training'), null), 'Fermeture processus wason entrainement'),
@@ -135,14 +147,17 @@ const mainFlow = [
       new ActionService(() => (SocketService.io.emit('start-wason'), null), 'Demarrage processus wason'),
       new ActionService(() => SocketService.waitForEvent('wason-started'), 'processus démarrés'),
       new ActionService(() => true, 'IA wason mesure réelle'),
-      new ActionService(() => Helper.wait(), 'Attente insertion fusible 1'),
-      new ActionService(() => Helper.wait(), 'Attente insertion fusible 2'),
+      new ActionService(() => SocketService.waitForEvent('wason-fusible-1'), 'Attente insertion fusible 1'),
+      new ActionService(() => SocketService.waitForEvent('wason-fusible-2'), 'Attente insertion fusible 2'),
+  ]),
+  new FlowService('Extinction réacteur', [
       new ActionService(() => true, 'IA quel reacteur éteindre ?'),
       new ActionService(() => true, 'Attente choix reacteur'),
-      new ActionService(() => true, 'Déverouillage porte'),
-      new ActionService(() => true, 'Rallumage lumière totale'),
-      new ActionService(() => true, 'IA succés'),
-  ])
+      new ActionService(() => SocketService.waitForEvent('reactor-shutdown'), 'Attente resultat extinction reacteur'),
+      new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
+      new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'Allumage lumière globale'),
+      new ActionService(() => true, 'IA succés. End'),
+  ]),
 ];
 
 module.exports = {
