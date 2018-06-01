@@ -75,5 +75,23 @@ if(config.deviceName === 'elec') {
   })
 }
 
+if(config.deviceName === 'crea1' || config.deviceName === 'crea3') {
+  const KEY_1 = 5;
+  const KEY_2 = 6;
+  const pinToKeyNumber = {
+    [KEY_1]: 1,
+    [KEY_2]: 2,
+  }
+  Helper.declareGpioPin(KEY_1, gpio.DIR_IN, gpio.EDGE_BOTH);
+  Helper.declareGpioPin(KEY_2, gpio.DIR_IN, gpio.EDGE_BOTH);
+  Helper.listenOnChange((pin, state)=> {
+    if(pin === KEY_1 || pin === KEY_2) {
+      if(state) {
+        console.log(`key-${config.deviceName}-${pinToKeyNumber[pin]}-on`);
+        mainServer.socket.emit(`key-${config.deviceName}-${pinToKeyNumber[pin]}-on`);
+      }
+    }
+  })
+}
 setTimeout(() => FlowService.executePromises(mainFlow)
   .catch(error => console.log('error !', error)), 1000);
