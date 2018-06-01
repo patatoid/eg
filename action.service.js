@@ -76,7 +76,7 @@ const generateWasonTrainingActions = () => {
   const devices = ['main', 'crea1', 'crea2', 'crea3'];
   return devices.map(device => {
     const deviceButton =  [1, 2];
-    const actions = deviceButton.map(word => new ActionService(() => SocketService.waitForEvent('wason-training-'+device), 'button'));
+    const actions = deviceButton.map(word => new ActionService(() => SocketService.waitForEvent('wason-selected-'+device), 'button'));
     return new FlowService(`ordinateur ${device}`, actions);
   });
 }

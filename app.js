@@ -22,7 +22,7 @@ const creaReacordSave = (socket, name) => {
 
 SocketService.io.on('connection', function(socket) {
 console.log('connection');
-  const transfere = (message) => socket.on(message, () => SocketService.emitSocketMessage(message));
+  const transfere = (message) => socket.on(message, (data) => SocketService.emitSocketMessage(message, data));
   creaReacordSave(socket, 'crea-record-main');
   creaReacordSave(socket, 'crea-record-crea1');
   creaReacordSave(socket, 'crea-record-crea2');
@@ -31,6 +31,10 @@ console.log('connection');
   transfere('session-opened');
   transfere('keys-inserted');
   transfere('elec-breaker-on');
+  transfere('wason-selected-main');
+  transfere('wason-selected-crea1');
+  transfere('wason-selected-crea2');
+  transfere('wason-selected-crea3');
   socket.on('key', (index) => {
     KeysService.saveKey(index);
   });
