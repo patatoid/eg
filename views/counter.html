@@ -36,11 +36,11 @@
        var stopped = false;
     });
   socket.on('counter-end', (endTime) => { stopped=true });
-  socket.on('reset', ()=>{ stopper=false; startTime =0;})
+  socket.on('counter-reset', ()=>{ stopper=false; startTime =0;})
   class Timer extends React.Component {
     render() {
       if(startTime == 0) return <p></p>
-      const duration = Date.now() - startTime;
+      const duration = 1800*1000 - ( Date.now() - startTime);
       var secondes = Math.round(duration % 60000)/1000 ;
       if (secondes < 10) secondes='0'+secondes;
       var minutes = Math.floor(duration/60000 % 60);
