@@ -2,7 +2,7 @@ const fs = require('fs');
 const Player = require('player');
 const Helper = require('./helper');
 
-const siren = './sounds/siren.mp3';
+const siren = 'siren.mp3';
 
 const recordPath = './records/voice.wav';
 
@@ -10,10 +10,13 @@ class SoundService {
   static get siren() { return siren; }
 
   static play(sound) {
-   const player = new Player(sound);
-   player.setVolume(1);
-   player.play();
-   player.on('error', (data) => {console.log('error sound service', data)})
+   const music = './sounds/'+sound;
+   Helper.launchProcess(['mpg123', [music]]);
+  }
+
+  static async playAndWait(sound, seconds) {
+    SoundService.play(sound);
+    await Helper.sleep(seconds);
   }
 
   static startRecording() {
