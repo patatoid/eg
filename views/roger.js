@@ -54,23 +54,35 @@ class Identification extends React.Component {
   }
 }
 
+class Video extends React.Component {
+  render() {
+    return (
+    <div style={{'width':'600px'}}>
+      <h2 style={{'color':'white'}}>{this.props.title}</h2>
+      <video width="480" height="360" controls>
+        <source src={this.props.src} type="video/mp4"/>
+      </video>
+    </div>
+    )
+  }
+}
+
 class Videos extends React.Component {
   render() {
     return (
-      <div>
-        <video width="320" height="240" controls>
-          <source src="videos/test.mp4" type="video/mp4"/>
-        </video>
-        <video width="320" height="240" controls>
-          <source src="videos/test.mp4" type="video/mp4"/>
-        </video>
-        <video width="320" height="240" controls>
-          <source src="videos/test.mp4" type="video/mp4"/>
-        </video>
-        <video width="320" height="240" controls>
+    <div>
+      <div style={{'margin-left':640, 'margin-top': 50}}>
+        <h1 style={{'color':'white'}}>Explication</h1>
+        <video width="640" height="480" controls>
           <source src="videos/test.mp4" type="video/mp4"/>
         </video>
       </div>
+      <div className="row" style={{'margin-left': 120, 'margin-top': 40}}>
+        <Video title="titre 1" src="videos/test.mp4"/>
+        <Video title="titre 2" src="videos/test.mp4"/>
+        <Video title="titre 3" src="videos/test.mp4"/>
+      </div>
+    </div>
     );
   }
 }
