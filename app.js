@@ -97,5 +97,11 @@ if(config.deviceName === 'crea1' || config.deviceName === 'crea3') {
     }
   })
 }
+
+if(!config.deviceName) {
+  console.log('you have to specify a device name ! ');
+  process.exit(1);
+}
+
 setTimeout(() => FlowService.executePromises(mainFlow)
   .catch(error => console.log('error !', error)), 1000);
