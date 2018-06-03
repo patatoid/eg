@@ -135,24 +135,21 @@ const mainFlow = [
     ]
   ),
   new FlowService('Enigme Wason entrainement', [
-      new ActionService(() => (SocketService.io.emit('start-wason-training'), null), 'Demarrage des processus pour enigme wason entrainement'),
+      new ActionService(() => (WasonService.mode='training', SocketService.io.emit('start-wason-training'), null), 'Demarrage des processus pour enigme wason entrainement'),
       new ActionService(() => SocketService.waitForEvent('wason-connected'), 'processus démarrés'),
       new ActionService(() => SoundService.playAndWait('IA_training_begin.mp3', 5), 'IA la procédure d\'entrainement va commencer'),
       new FlowService('Resultats', generateWasonTrainingActions(), ACTION_TYPE.PARALLEL),
-      new ActionService(() => (SocketService.io.emit('close-wason-training'), null), 'Fermeture processus wason entrainement'),
     ]
   ),
   new FlowService('Enigme Wason', [
-      new ActionService(() => (SocketService.io.emit('start-wason'), null), 'Demarrage processus wason'),
-      new ActionService(() => SocketService.waitForEvent('wason-started'), 'processus démarrés'),
-      new ActionService(() => true, 'IA wason mesure réelle'),
-      new ActionService(() => SocketService.waitForEvent('wason-fusible-1'), 'Attente insertion fusible 1'),
-      new ActionService(() => SocketService.waitForEvent('wason-fusible-2'), 'Attente insertion fusible 2'),
+      new ActionService(() => (WasonService.mode='real', Helper.openChromium('wason-real.html')), 'Demarrage processus wason réel'),
+      new ActionService(() => SocketService.waitForEvent('wason-connected'), 'processus démarrés'),
+      new ActionService(() => SocketService.waitForEvent('wason-fusible'), 'Attente insertion fusible 1'),
+      new ActionService(() => SocketService.waitForEvent('wason-fusible'), 'Attente insertion fusible 2'),
   ]),
   new FlowService('Extinction réacteur', [
       new ActionService(() => SoundService.playAndWait('IA_wason_end.mp3', 6), 'IA quel reacteur éteindre ?'),
-      new ActionService(() => true, 'Attente choix reacteur'),
-      new ActionService(() => SocketService.waitForEvent('reactor-shutdown'), 'Attente resultat extinction reacteur'),
+      new ActionService(() => true, Helper.buttonWasonChanged()),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
       new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'Allumage lumière globale'),
       new ActionService(() => true, 'IA succés. End'),

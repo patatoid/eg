@@ -41,7 +41,7 @@ console.log('connection');
   socket.on('wason-connected', () => {
   console.log('wason-connected');
     SocketService.emitSocketMessage('wason-connected');
-    return WasonService.handleWasonLearning(socket);
+    return WasonService.handleWason(socket);
   });
   socket.on('crea-connected', () => {
     SocketService.emitSocketMessage('crea-connected');
@@ -100,7 +100,7 @@ if(config.deviceName === 'crea1' || config.deviceName === 'crea3') {
 
 if(!config.deviceName) {
   console.log('you have to specify a device name ! ');
-  process.exit(1);
+  process.exit(1)
 }
 
 setTimeout(() => FlowService.executePromises(mainFlow)
