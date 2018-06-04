@@ -103,5 +103,7 @@ if(!config.deviceName) {
   process.exit(1)
 }
 
-setTimeout(() => FlowService.executePromises(mainFlow)
+if(config.deviceName === 'main') {
+setTimeout(() => FlowService.executePromises(mainFlow.slice(0))
   .catch(error => console.log('error !', error)), 1000);
+}

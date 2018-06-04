@@ -4,7 +4,7 @@ const { gpio } = require('./gpio');
 const SoundService = require('./sound.service');
 const words = require('./words');
 
-const CREA_BUTTON_PIN = 25;
+const CREA_BUTTON_PIN = 22;
 
 Helper.declareGpioPin(CREA_BUTTON_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
 

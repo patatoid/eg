@@ -2,10 +2,9 @@ const Helper = require('./helper');
 
 const ON='on';
 const OFF='off';
-const MAGNET_ENTRANCE=0;
+const MAGNET_ENTRANCE=3;
 const MAGNET_LOCK=1;
 const GLOBAL_LIGHT=2;
-const SMALL_ELEC_LIGHT=3;
 const GYRO=4;
 const MAGNET_CLOSET_1=5;
 const MAGNET_CLOSET_2=6;
@@ -21,19 +20,22 @@ class DeviceService {
 
   static async on(device) {
     await DeviceService.change(device, ON);
+    await DeviceService.change(device, ON);
   }
 
   static async off(device) {
     await DeviceService.change(device, OFF);
+    await DeviceService.change(device, OFF);
   }
 
   static async change(device, state) {
+    await Helper.sleep(0.2);
     return new Promise((resolve, reject) => {
       console.log('process chacon start', device, state);
       const process = Helper.launchProcess(['sudo', ['scripts/chacon_send/chacon_send', '0', '18922461', device, state]]);
       process.on('close', (code) => {
         if(code !== 0) console.log('chacon_send process error code '+code);
-        resolve();
+        setTimeout(() => resolve(), 200);
       })
     });
   }

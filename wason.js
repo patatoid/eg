@@ -49,12 +49,15 @@ class WasonService {
     Helper.closeChromium();
   }
 
-  static set wasonMode(mode) {
+  static set mode(mode) {
+    console.log('setWasonMode', mode);
     wasonMode = mode;
+    console.log('wasonMode', wasonMode);
   }
 
   static async handleWason(socket) {
     console.log('handleWason');
+    console.log('waonsMode', wasonMode);
     if (wasonMode === 'real') return WasonService.startWasonReal(socket);
     const reactors = [
      {code: 'temp_high#pre_high', label: 'Surchauffe / Surpression', id: ['1']},
@@ -72,6 +75,11 @@ class WasonService {
 
   static async wasonLearningCycle(socket, positions, {previousSelectedPin = null} = {}) {
     console.log('previsousSelected', previousSelectedPin);
+    console.log('pins', _.pull([
+      WASON_LEARING_BUTTON_1_PIN,
+      WASON_LEARING_BUTTON_2_PIN,
+      WASON_LEARING_BUTTON_3_PIN,
+      WASON_LEARING_BUTTON_4_PIN], previousSelectedPin));
     const buttonRecord = await Helper.buttonWasonChanged(_.pull([
       WASON_LEARING_BUTTON_1_PIN,
       WASON_LEARING_BUTTON_2_PIN,
@@ -80,7 +88,7 @@ class WasonService {
     const { mainServer } = require('./server');
     console.log('buttonRecord', buttonRecord);
     positions.reactors[pinToIndex[buttonRecord.channel]].selected = true;
-    const newPositions = {...positions, buttonRecord};
+    const newPositions = {...positions, button:pinToIndex[buttonRecord.channel]};
     socket.emit('wason-selected', newPositions);
     mainServer.socket.emit('wason-selected-'+config.deviceName, newPositions);
     await Helper.sleep(0.5);
@@ -116,7 +124,7 @@ class WasonService {
       WASON_LEARING_BUTTON_2_PIN,
       WASON_LEARING_BUTTON_3_PIN,
       WASON_LEARING_BUTTON_4_PIN], true);
-    return butonRecord;
+    return pinToIndex[buttonRecord.channel];
   }
 }
 

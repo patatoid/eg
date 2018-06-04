@@ -3,6 +3,7 @@ const SoundService = require('./sound.service');
 const DeviceService = require('./device.service');
 const { mainServer } = require('./server');
 const { SocketService } = require('./socket.service');
+const { WasonService } = require('./wason');
 const words = require('./words');
 
 const ACTION_STATE = {
@@ -76,7 +77,7 @@ const generateWasonTrainingActions = () => {
   const devices = ['main', 'crea1', 'crea2', 'crea3'];
   return devices.map(device => {
     const deviceButton =  [1, 2];
-    const actions = deviceButton.map(word => new ActionService(() => SocketService.waitForEvent('wason-selected-'+device), 'button'));
+    const actions = deviceButton.map(button => new ActionService(() => SocketService.waitForEvent('wason-selected-'+device), 'button'+button));
     return new FlowService(`ordinateur ${device}`, actions);
   });
 }
@@ -143,14 +144,14 @@ const mainFlow = [
     ]
   ),
   new FlowService('Enigme Wason', [
-      new ActionService(() => (WasonService.mode='real', Helper.openChromium('wason-real.html')), 'Demarrage processus wason réel'),
+      new ActionService(() => (WasonService.mode='real', Helper.openChromium('wason.html')), 'Demarrage processus wason réel'),
       new ActionService(() => SocketService.waitForEvent('wason-connected'), 'processus démarrés'),
       new ActionService(() => SocketService.waitForEvent('wason-fusible'), 'Attente insertion fusible 1'),
       new ActionService(() => SocketService.waitForEvent('wason-fusible'), 'Attente insertion fusible 2'),
   ]),
   new FlowService('Extinction réacteur', [
       new ActionService(() => SoundService.playAndWait('IA_wason_end.mp3', 6), 'IA quel reacteur éteindre ?'),
-      new ActionService(() => true, Helper.buttonWasonChanged()),
+      new ActionService(() => WasonService.wasonStopReactorChoice(), 'Stop reactor button choice'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
       new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'Allumage lumière globale'),
       new ActionService(() => true, 'IA succés. End'),
