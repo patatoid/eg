@@ -67,6 +67,11 @@ mainServer.socket.on('start-wason-training', () => WasonService.startWason());
 
 if(config.deviceName === 'elec') {
   const ELEC_TRIGGER_PIN = 11;
+  const FUSIBLE_1=12;
+  const FUSIBLE_2=15;
+  const FUSIBLE_3=16;
+  const FUSIBLE_4=13;
+
   Helper.declareGpioPin(ELEC_TRIGGER_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
  console.log('declare pin');
   Helper.listenOnChange((pin, state)=> {
@@ -75,7 +80,11 @@ if(config.deviceName === 'elec') {
 	console.log('elec-breaker-on');
         mainServer.socket.emit('elec-breaker-on');
       }
-    }
+     } else if(_.includes([FUSIBLE_1, FUSIBLE_2, FUSIBLE_3, FUSIBLE_4], pin)) {
+       if(state) {
+          mainServer.socket.emit('wason-fusible', pin);
+       }
+     }
   })
 }
 

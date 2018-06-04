@@ -146,8 +146,8 @@ const mainFlow = [
   new FlowService('Enigme Wason', [
       new ActionService(() => (WasonService.mode='real', Helper.openChromium('wason.html')), 'Demarrage processus wason réel'),
       new ActionService(() => SocketService.waitForEvent('wason-connected'), 'processus démarrés'),
-      new ActionService(() => SocketService.waitForEvent('wason-fusible'), 'Attente insertion fusible 1'),
-      new ActionService(() => SocketService.waitForEvent('wason-fusible'), 'Attente insertion fusible 2'),
+      new ActionService(() => SocketService.waitForEvent('wason-real-selected'), 'Attente insertion fusible 1'),
+      new ActionService(() => SocketService.waitForEvent('wason-real-selected'), 'Attente insertion fusible 2'),
   ]),
   new FlowService('Extinction réacteur', [
       new ActionService(() => SoundService.playAndWait('IA_wason_end.mp3', 6), 'IA quel reacteur éteindre ?'),
