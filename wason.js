@@ -1,20 +1,13 @@
 const _ = require('lodash');
 const config = require('./config');
 const Helper = require('./helper');
-const { SocketService } = require('./socket');
+const { SocketService } = require('./socket.service');
 const { gpio } = require('./gpio');
 
 const WASON_LEARING_BUTTON_1_PIN = 13;
 const WASON_LEARING_BUTTON_2_PIN = 15;
 const WASON_LEARING_BUTTON_3_PIN = 16;
 const WASON_LEARING_BUTTON_4_PIN = 18;
-
-const reactors = [
- {label: 'Surchauffe / Surpression'},
- {label: 'Surchauffe / Pression normale'},
- {label: 'Chauffe normale / Surpression'},
- {label: 'Chauffe normale / Pression normale'},
-]
 
 const fusibleToIndex = {
   'A': 0,
@@ -63,6 +56,12 @@ class WasonService {
   static async handleWason(socket) {
     console.log('handleWason');
     if (wasonMode === 'real') return WasonService.startWasonReal(socket);
+    const reactors = [
+     {code: 'temp_high#pre_high', label: 'Surchauffe / Surpression', id: ['1']},
+     {code: 'temp_high#pre_normal', label: 'Surchauffe / Pression normale', id: ['2']},
+     {code: 'temp_normal#pre_high', label: 'Chauffe normale / Surpression', id: ['3']},
+     {code: 'temp_normal#pre_normal', label: 'Chauffe normale / Pression normale', id: ['4']},
+    ];
     const positions = {shift: shift[config.deviceName], reactors};
     socket.emit('wason-selected', positions);
     const selectedReactor1 = await WasonService.wasonLearningCycle(socket, positions);
@@ -90,6 +89,12 @@ class WasonService {
 
   static async startWasonReal(socket) {
     let shift = 1;
+    const reactors = [
+     {code: 'temp_high#pre_high', label: 'Surchauffe / Surpression', id: ['A', 'B']},
+     {code: 'temp_high#pre_normal', label: 'Surchauffe / Pression normale', id: ['C', 'D']},
+     {code: 'temp_normal#pre_high', label: 'Chauffe normale / Surpression', id: ['E', 'F']},
+     {code: 'temp_normal#pre_normal', label: 'Chauffe normale / Pression normale', id: ['G', 'H']},
+    ];
     const positions = {shift, reactors};
     socket.emit('wason-selected', positions);
     await WasonService.wasonRealCycle(socket, positions);
