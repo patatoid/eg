@@ -130,6 +130,7 @@ const mainFlow = [
   ),
   new FlowService('Enigme 4 clés', [
       new ActionService(() => SocketService.waitForEvent('keys-inserted'), 'Attente insertion 4 clés'),
+      new ActionService(() => Helper.closeChromium(), 'extinction ecran roger'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_2), 'Ouverture placard 2'),
       new ActionService(() => true, 'Son placard débloqué'),
     ]
