@@ -66,7 +66,7 @@ mainServer.socket.on('start-wason-training', () => WasonService.startWason());
 
 
 if(config.deviceName === 'elec') {
-  const ELEC_TRIGGER_PIN = 37;
+  const ELEC_TRIGGER_PIN = 11;
   Helper.declareGpioPin(ELEC_TRIGGER_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
  console.log('declare pin');
   Helper.listenOnChange((pin, state)=> {
