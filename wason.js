@@ -30,13 +30,15 @@ const shift = {
   'crea3': 3,
 }
 
-
-Helper.declareGpioPin(WASON_LEARING_BUTTON_1_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
-Helper.declareGpioPin(WASON_LEARING_BUTTON_2_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
-Helper.declareGpioPin(WASON_LEARING_BUTTON_3_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
-Helper.declareGpioPin(WASON_LEARING_BUTTON_4_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+if (config.deviceName != 'elec') {
+  Helper.declareGpioPin(WASON_LEARING_BUTTON_1_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+  Helper.declareGpioPin(WASON_LEARING_BUTTON_2_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+  Helper.declareGpioPin(WASON_LEARING_BUTTON_3_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+  Helper.declareGpioPin(WASON_LEARING_BUTTON_4_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+}
 
 let wasonMode = 'learning';
+let fusibleEnabled = false;
 
 class WasonService {
   static startWason() {
@@ -53,6 +55,13 @@ class WasonService {
     console.log('setWasonMode', mode);
     wasonMode = mode;
     console.log('wasonMode', wasonMode);
+  }
+
+  static disableFusible() {
+    fusibleEnabled = false;
+  }
+  static enableFusible() {
+    fusibleEnabled = true;
   }
 
   static async handleWason(socket) {
