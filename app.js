@@ -35,9 +35,11 @@ console.log('connection');
   transfere('wason-selected-crea1');
   transfere('wason-selected-crea2');
   transfere('wason-selected-crea3');
+  transfere('wason-fusible');
   socket.on('key', (index) => {
     KeysService.saveKey(index);
   });
+  socket.on('wason-fusible', (pin) => WasonService.handleFusible(pin));
   socket.on('wason-connected', () => {
   console.log('wason-connected');
     SocketService.emitSocketMessage('wason-connected');

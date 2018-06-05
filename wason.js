@@ -126,6 +126,10 @@ class WasonService {
       WASON_LEARING_BUTTON_4_PIN], true);
     return pinToIndex[buttonRecord.channel];
   }
+
+  static async handleFusible(pin) {
+  console.log('handleFusible', pin);
+  }
 }
 
 module.exports = {WasonService};
