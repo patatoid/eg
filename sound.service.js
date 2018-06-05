@@ -13,15 +13,15 @@ class SoundService {
 
   static play(sound) {
    const music = './sounds/'+sound;
-   if(soundInProgress) return;
-   soundInProgress = true;
    Helper.launchProcess(['mpg123', [music]]);
-   soundInProgress = true;
   }
 
   static async playAndWait(sound, seconds) {
+   if(soundInProgress) return;
+    soundInProgress = true;
     SoundService.play(sound);
     await Helper.sleep(seconds);
+    soundInProgress = false;
   }
 
   static startRecording() {

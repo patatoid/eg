@@ -2,6 +2,7 @@ const _ = require('lodash');
 const config = require('./config');
 const Helper = require('./helper');
 const { SocketService } = require('./socket.service');
+const SoundService = require('./sound.service');
 const { gpio } = require('./gpio');
 
 const WASON_LEARING_BUTTON_1_PIN = 13;
@@ -139,7 +140,8 @@ class WasonService {
   }
 
   static async handleFusible(pin) {
-  console.log('handleFusible', pin);
+    console.log('handleFusible', pin);
+    if(!fusibleEnabled) await SoundService.playAndWait('IA_fusible.mp3', 6);
   }
 }
 
