@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const execa = require('execa');
 const { gpio } = require('./gpio');
 const config = require('./config');
@@ -72,16 +73,18 @@ if(config.deviceName === 'elec') {
   const FUSIBLE_3=16;
   const FUSIBLE_4=13;
 
-  Helper.declareGpioPin(ELEC_TRIGGER_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
- console.log('declare pin');
+  Helper.declareGpioPin(ELEC_TRIGGER_PIN, gpio.DIR_IN, gpio.EDGE_RISING);
+  Helper.declareGpioPin(FUSIBLE_1, gpio.DIR_IN, gpio.EDGE_RISING);
+  Helper.declareGpioPin(FUSIBLE_2, gpio.DIR_IN, gpio.EDGE_RISING);
+  Helper.declareGpioPin(FUSIBLE_3, gpio.DIR_IN, gpio.EDGE_RISING);
+  Helper.declareGpioPin(FUSIBLE_4, gpio.DIR_IN, gpio.EDGE_RISING);
   Helper.listenOnChange((pin, state)=> {
-    if(pin === ELEC_TRIGGER_PIN) {
-      if(state) {
+    if(pin === ELEC_TRIGGER_PIN && state) {
 	console.log('elec-breaker-on');
         mainServer.socket.emit('elec-breaker-on');
-      }
      } else if(_.includes([FUSIBLE_1, FUSIBLE_2, FUSIBLE_3, FUSIBLE_4], pin)) {
        if(state) {
+	  console.log('wason-fusible', pin);
           mainServer.socket.emit('wason-fusible', pin);
        }
      }
