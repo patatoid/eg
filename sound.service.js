@@ -6,12 +6,17 @@ const siren = 'siren.mp3';
 
 const recordPath = './records/voice.wav';
 
+let soundInProgress = false;
+
 class SoundService {
   static get siren() { return siren; }
 
   static play(sound) {
    const music = './sounds/'+sound;
+   if(soundInProgress) return;
+   soundInProgress = true;
    Helper.launchProcess(['mpg123', [music]]);
+   soundInProgress = true;
   }
 
   static async playAndWait(sound, seconds) {
