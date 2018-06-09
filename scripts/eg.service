@@ -1,0 +1,16 @@
+[Unit]
+Description=escape-game
+After=network.target
+
+[Service]
+Environment=MAIN_SERVER=192.168.0.2
+Environment=DEVICE_NAME=main
+ExecStart=/usr/bin/node app.js
+WorkingDirectory=/home/pi/escape-game
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
