@@ -78,11 +78,11 @@ if(config.deviceName === 'elec') {
   const FUSIBLE_3=16;
   const FUSIBLE_4=13;
 
-  Helper.declareGpioPin(ELEC_TRIGGER_PIN, gpio.DIR_IN, gpio.EDGE_RISING);
-  Helper.declareGpioPin(FUSIBLE_1, gpio.DIR_IN, gpio.EDGE_RISING);
-  Helper.declareGpioPin(FUSIBLE_2, gpio.DIR_IN, gpio.EDGE_RISING);
-  Helper.declareGpioPin(FUSIBLE_3, gpio.DIR_IN, gpio.EDGE_RISING);
-  Helper.declareGpioPin(FUSIBLE_4, gpio.DIR_IN, gpio.EDGE_RISING);
+  GpioService.declareGpioPin(ELEC_TRIGGER_PIN, gpio.DIR_IN, gpio.EDGE_RISING);
+  GpioService.declareGpioPin(FUSIBLE_1, gpio.DIR_IN, gpio.EDGE_RISING);
+  GpioService.declareGpioPin(FUSIBLE_2, gpio.DIR_IN, gpio.EDGE_RISING);
+  GpioService.declareGpioPin(FUSIBLE_3, gpio.DIR_IN, gpio.EDGE_RISING);
+  GpioService.declareGpioPin(FUSIBLE_4, gpio.DIR_IN, gpio.EDGE_RISING);
   GpioService.listenOnChange((pin, state)=> {
     if(pin === ELEC_TRIGGER_PIN && state) {
         console.log('elec-breaker-on');
@@ -103,8 +103,8 @@ if(config.deviceName === 'crea1' || config.deviceName === 'crea3') {
     [KEY_1]: 1,
     [KEY_2]: 2,
   }
-  Helper.declareGpioPin(KEY_1, gpio.DIR_IN, gpio.EDGE_BOTH);
-  Helper.declareGpioPin(KEY_2, gpio.DIR_IN, gpio.EDGE_BOTH);
+  GpioService.declareGpioPin(KEY_1, gpio.DIR_IN, gpio.EDGE_BOTH);
+  GpioService.declareGpioPin(KEY_2, gpio.DIR_IN, gpio.EDGE_BOTH);
   GpioService.listenOnChange((pin, state)=> {
     if(pin === KEY_1 || pin === KEY_2) {
       if(!state) {
