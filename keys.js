@@ -1,12 +1,15 @@
+const { SocketService } = require('./socket.service');
 
 const keys = [2000,0,0,0];
 
 class KeysService {
   static saveKey(index) {
-    keys[index] = Date.now();
-    const isInSameTime = computeKeys();
+    keys[index-1] = Date.now();
+    console.log('saveKey', keys);
+    const isInSameTime = KeysService.computeKeys();
     if(isInSameTime) {
-      emitSocketMessage('keys-inserted');
+     console.log('emit', 'keys-inserted')
+      SocketService.emitSocketMessage('keys-inserted');
     }
   }
 

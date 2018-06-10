@@ -3,7 +3,7 @@ const config = require('./config');
 const Helper = require('./helper');
 const { SocketService } = require('./socket.service');
 const SoundService = require('./sound.service');
-const { gpio } = require('./gpio');
+const { gpio, GpioService } = require('./gpio');
 
 const WASON_LEARING_BUTTON_1_PIN = 13;
 const WASON_LEARING_BUTTON_2_PIN = 15;
@@ -32,10 +32,10 @@ const shift = {
 }
 
 if (config.deviceName != 'elec') {
-  Helper.declareGpioPin(WASON_LEARING_BUTTON_1_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
-  Helper.declareGpioPin(WASON_LEARING_BUTTON_2_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
-  Helper.declareGpioPin(WASON_LEARING_BUTTON_3_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
-  Helper.declareGpioPin(WASON_LEARING_BUTTON_4_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+  GpioService.declareGpioPin(WASON_LEARING_BUTTON_1_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+  GpioService.declareGpioPin(WASON_LEARING_BUTTON_2_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+  GpioService.declareGpioPin(WASON_LEARING_BUTTON_3_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+  GpioService.declareGpioPin(WASON_LEARING_BUTTON_4_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
 }
 
 let wasonMode = 'learning';
@@ -90,7 +90,7 @@ class WasonService {
       WASON_LEARING_BUTTON_2_PIN,
       WASON_LEARING_BUTTON_3_PIN,
       WASON_LEARING_BUTTON_4_PIN], previousSelectedPin));
-    const buttonRecord = await Helper.buttonWasonChanged(_.pull([
+    const buttonRecord = await GpioService.buttonWasonChanged(_.pull([
       WASON_LEARING_BUTTON_1_PIN,
       WASON_LEARING_BUTTON_2_PIN,
       WASON_LEARING_BUTTON_3_PIN,
@@ -131,7 +131,7 @@ class WasonService {
   }
 
   static async wasonStopReactorChoice() {
-    const buttonRecord = await Helper.buttonWasonChanged([
+    const buttonRecord = await GpioService.buttonWasonChanged([
       WASON_LEARING_BUTTON_1_PIN,
       WASON_LEARING_BUTTON_2_PIN,
       WASON_LEARING_BUTTON_3_PIN,

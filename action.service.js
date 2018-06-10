@@ -85,9 +85,11 @@ const mainFlow = [
   new FlowService('Reset Etat', [
       new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'Allumage lumière globale'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
+      new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte (securite)'),
       new ActionService(() => DeviceService.on(DeviceService.MAGNET_ENTRANCE), 'maintient porte ouverte'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_1), 'Ouverture placard 1'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_2), 'Ouverture placard 2'),
+      new ActionService(() => (SocketService.io.emit('restart'), null), 'Redemarrage des autres services'),
   ]),
   new FlowService('Setup', [
       new ActionService(() => Helper.wait(), 'Attente manipulation du game master', { force: 'Effectué' }),
@@ -103,14 +105,14 @@ const mainFlow = [
       new ActionService(() => (SocketService.io.emit('counter-start'), null), 'Demarrage compteur'),
       new ActionService(() => (SocketService.io.emit('screen', 'berserk'), null), 'Ecrans berserk'),
       new ActionService(() => SoundService.playAndWait(SoundService.siren, 10), 'sirene 10s'),
-      new ActionService(() => SoundService.playAndWait('IA_security_protocol.mp3', 3), 'IA demarrage protocole sécurité'),
+      new ActionService(() => SoundService.playAndWait('IA_security_protocol.mp3', 4), 'IA demarrage protocole sécurité'),
     ]
   ),
   new FlowService('Enigme Elec', [
       new ActionService(() => SocketService.waitForEvent('elec-breaker-on'), 'En attente manipulation coffret electrique joueur'),
       new ActionService(() => (SocketService.io.emit('screen', 'elec_restored'), null), 'Ecrans backup generator restored'),
       new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'rallumage lumière globale'),
-      new ActionService(() => SoundService.playAndWait('IA_light.mp3', 8), 'IA parle bizarrement'),
+      new ActionService(() => SoundService.playAndWait('IA_light.mp3', 9), 'IA parle bizarrement'),
     ]
   ),
   new FlowService('Enigme Crea', [
@@ -119,8 +121,8 @@ const mainFlow = [
       new ActionService(() => SocketService.waitForEvent('crea-connected'), 'Crea démarré'),
       new FlowService('Resultats', generateCreaActions(), ACTION_TYPE.PARALLEL),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_1), 'Ouverture placard 1'),
-      new ActionService(() => true, 'Son placard débloqué'),
-      new ActionService(() => SoundService.playAndWait('IA_analyse_in_progress.mp3', 5), 'IA crea terminé, analyse probleme'),
+      new ActionService(() => SoundService.playAndWait('IA_placard.mp3', 3), 'IA placard dévérouillé'),
+      new ActionService(() => SoundService.playAndWait('IA_analyse_in_progress.mp3', 6), 'IA crea terminé, analyse probleme'),
     ]
   ),
   new FlowService('Enigme Base de donnée et ordi central', [
@@ -130,16 +132,17 @@ const mainFlow = [
     ]
   ),
   new FlowService('Enigme 4 clés', [
+      new ActionService(() => Helper.wait(), 'Attente déclenchement par Game Master', { force: 'Déclencher' }),
       new ActionService(() => SocketService.waitForEvent('keys-inserted'), 'Attente insertion 4 clés'),
       new ActionService(() => Helper.closeChromium(), 'extinction ecran roger'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_2), 'Ouverture placard 2'),
-      new ActionService(() => true, 'Son placard débloqué'),
+      new ActionService(() => SoundService.playAndWait('IA_placard.mp3', 3), 'IA placard dévérouillé'),
     ]
   ),
   new FlowService('Enigme Wason entrainement', [
       new ActionService(() => (WasonService.mode='training', SocketService.io.emit('start-wason-training'), null), 'Demarrage des processus pour enigme wason entrainement'),
       new ActionService(() => SocketService.waitForEvent('wason-connected'), 'processus démarrés'),
-      new ActionService(() => SoundService.playAndWait('IA_training_begin.mp3', 5), 'IA la procédure d\'entrainement va commencer'),
+      new ActionService(() => SoundService.playAndWait('IA_training_begin.mp3', 6), 'IA la procédure d\'entrainement va commencer'),
       new FlowService('Resultats', generateWasonTrainingActions(), ACTION_TYPE.PARALLEL),
     ]
   ),
@@ -150,12 +153,12 @@ const mainFlow = [
       new ActionService(() => SocketService.waitForEvent('wason-real-selected'), 'Attente insertion fusible 2'),
   ]),
   new FlowService('Extinction réacteur', [
-      new ActionService(() => SoundService.playAndWait('IA_wason_end.mp3', 6), 'IA quel reacteur éteindre ?'),
+      new ActionService(() => SoundService.playAndWait('IA_wason_end.mp3', 7), 'IA quel reacteur éteindre ?'),
       new ActionService(() => WasonService.wasonStopReactorChoice(), 'Stop reactor button choice'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
+      new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte (securite)'),
       new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'Allumage lumière globale'),
-      new ActionService(() => true, 'IA succés. End'),
-      new ActionService(() => SoundService.playAndWait('IA_end_good.mp3', 5), 'IA la procédure d\'entrainement va commencer'),
+      new ActionService(() => SoundService.playAndWait('IA_end_good.mp3', 6), 'IA succés. End'),
   ]),
 ];
 

@@ -1,6 +1,7 @@
 const { io } = require('./server');
 const EventEmitter = require('events');
 const socketListener = new EventEmitter();
+socketListener.setMaxListeners(50);
 
 class SocketService {
   static get io() {

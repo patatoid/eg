@@ -1,12 +1,12 @@
 const config = require('./config');
 const Helper = require('./helper');
-const { gpio } = require('./gpio');
+const { gpio, GpioService } = require('./gpio');
 const SoundService = require('./sound.service');
 const words = require('./words');
 
 const CREA_BUTTON_PIN = 22;
 
-Helper.declareGpioPin(CREA_BUTTON_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
+GpioService.declareGpioPin(CREA_BUTTON_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
 
 class CreaService {
   static async handleCrea(socket) {
@@ -45,11 +45,11 @@ class CreaService {
   }
 
   static async buttonEvent(cycleStartTime) {
-    await Helper.buttonChanged(CREA_BUTTON_PIN, true);
+    await GpioService.buttonChanged(CREA_BUTTON_PIN, true);
     console.log('start recording');
     const duration = Date.now()-cycleStartTime;
     const recordProcess = SoundService.startRecording();
-    await Helper.buttonChanged(CREA_BUTTON_PIN, false);
+    await GpioService.buttonChanged(CREA_BUTTON_PIN, false);
     const recordedData = await SoundService.stopRecording(recordProcess);
     console.log('stop recording -> recordedData', recordedData.length);
     return {duration, data: recordedData};

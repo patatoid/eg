@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const execa = require('execa');
-const { gpio } = require('./gpio');
+const { gpio, GpioService } = require('./gpio');
 const config = require('./config');
 const { AdminService } = require('./admin');
 const Helper = require('./helper');
@@ -61,6 +61,9 @@ console.log('connection');
 mainServer.socket.on('connect', () => {
   mainServer.socket.emit('identification', config.deviceName);
 });
+mainServer.socket.on('restart', () => {
+  process.exit(0);
+});
 mainServer.socket.on('screen', (type) => {
   Helper.launchProcess(['sh', [`./scripts/${type}.sh`]]);
 })
@@ -80,13 +83,13 @@ if(config.deviceName === 'elec') {
   Helper.declareGpioPin(FUSIBLE_2, gpio.DIR_IN, gpio.EDGE_RISING);
   Helper.declareGpioPin(FUSIBLE_3, gpio.DIR_IN, gpio.EDGE_RISING);
   Helper.declareGpioPin(FUSIBLE_4, gpio.DIR_IN, gpio.EDGE_RISING);
-  Helper.listenOnChange((pin, state)=> {
+  GpioService.listenOnChange((pin, state)=> {
     if(pin === ELEC_TRIGGER_PIN && state) {
-	console.log('elec-breaker-on');
+        console.log('elec-breaker-on');
         mainServer.socket.emit('elec-breaker-on');
      } else if(_.includes([FUSIBLE_1, FUSIBLE_2, FUSIBLE_3, FUSIBLE_4], pin)) {
        if(state) {
-	  console.log('wason-fusible', pin);
+          console.log('wason-fusible', pin);
           mainServer.socket.emit('wason-fusible', pin);
        }
      }
@@ -102,7 +105,7 @@ if(config.deviceName === 'crea1' || config.deviceName === 'crea3') {
   }
   Helper.declareGpioPin(KEY_1, gpio.DIR_IN, gpio.EDGE_BOTH);
   Helper.declareGpioPin(KEY_2, gpio.DIR_IN, gpio.EDGE_BOTH);
-  Helper.listenOnChange((pin, state)=> {
+  GpioService.listenOnChange((pin, state)=> {
     if(pin === KEY_1 || pin === KEY_2) {
       if(state) {
         console.log(`key-${config.deviceName}-${pinToKeyNumber[pin]}-on`);
@@ -115,6 +118,8 @@ if(config.deviceName === 'crea1' || config.deviceName === 'crea3') {
 if(!config.deviceName) {
   console.log('you have to specify a device name ! ');
   process.exit(1)
+} else {
+  Helper.closeChromium();
 }
 
 if(config.deviceName === 'main') {
