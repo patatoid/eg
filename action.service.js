@@ -144,6 +144,7 @@ const mainFlow = [
       new ActionService(() => SocketService.waitForEvent('wason-connected'), 'processus démarrés'),
       new ActionService(() => SoundService.playAndWait('IA_training_begin.mp3', 6), 'IA la procédure d\'entrainement va commencer'),
       new FlowService('Resultats', generateWasonTrainingActions(), ACTION_TYPE.PARALLEL),
+      new ActionService(() => Helper.sleep(5), 'pause 5s'),
     ]
   ),
   new FlowService('Enigme Wason', [
