@@ -62,7 +62,8 @@ mainServer.socket.on('connect', () => {
   mainServer.socket.emit('identification', config.deviceName);
 });
 mainServer.socket.on('restart', () => {
-  process.exit(0);
+  Helper.closeChromium();
+  if(config.deviceName !== 'main') process.exit(0);
 });
 mainServer.socket.on('screen', (type) => {
   Helper.launchProcess(['sh', [`./scripts/${type}.sh`]]);
