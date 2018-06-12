@@ -37,8 +37,8 @@ class GpioService {
 
   static async buttonChanged(pin, state) {
     return new Promise((resolve, reject) => {
-      gpioListener.once(`${pin}_${state}`, (channel, value) => {
-        resolve(value);
+      gpioListener.once(`${pin}_${state}`, () => {
+        resolve({channel: pin, value: state});
       });
     });
   }

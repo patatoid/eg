@@ -123,7 +123,7 @@ class WasonService {
   static async wasonRealCycle(socket, positions, {previousSelectedPin = null} = {}) {
     const selectedReactor = await SocketService.waitForEvent('wason-fusible');
     if(previousSelectedPin === selectedReactor) return WasonService.wasonRealCycle(socket, positions, {previousSelectedPin});
-    positions.reactors[fusibleToIndex[selectedreactor]].selected = true;
+    positions.reactors[fusibleToIndex[selectedReactor]].selected = true;
     const newPositions = {...positions, selectedReactor};
     socket.emit('wason-selected', positions);
     SocketService.emitSocketMessage('wason-real-selected', positions);
