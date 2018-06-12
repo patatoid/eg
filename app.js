@@ -110,7 +110,7 @@ if(config.deviceName === 'crea1' || config.deviceName === 'crea3') {
     if(pin === KEY_1 || pin === KEY_2) {
       if(!state) {
         const startIndex = (config.deviceName==='crea1') ? 0 : 2;
-	const keyNumber = startIndex + pinToKeyNumber[pin];
+        const keyNumber = startIndex + pinToKeyNumber[pin];
         console.log('key', keyNumber);
         mainServer.socket.emit('key', keyNumber);
       }

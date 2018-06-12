@@ -11,10 +11,10 @@ const WASON_LEARING_BUTTON_3_PIN = 16;
 const WASON_LEARING_BUTTON_4_PIN = 18;
 
 const fusibleToIndex = {
-  'A': 0,
-  'B': 1,
-  'C': 2,
-  'D': 3,
+  '12': 0,
+  '13': 1,
+  '15': 2,
+  '16': 3,
 }
 
 const pinToIndex = {
@@ -79,7 +79,7 @@ class WasonService {
     socket.emit('wason-selected', positions);
     const selectedReactor1 = await WasonService.wasonLearningCycle(socket, positions);
     const selectedReactor2 = await WasonService.wasonLearningCycle(socket, positions, {previousSelectedPin: selectedReactor1});
-    await Helper.sleep(5);
+    await Helper.sleep(2);
     await WasonService.stopWason(socket);
   }
 
@@ -98,7 +98,7 @@ class WasonService {
     const { mainServer } = require('./server');
     console.log('buttonRecord', buttonRecord);
     positions.reactors[pinToIndex[buttonRecord.channel]].selected = true;
-    const newPositions = {...positions, button:pinToIndex[buttonRecord.channel]};
+    const newPositions = {...positions, button:pinToIndex[buttonRecord.channel], type: 'wason'};
     socket.emit('wason-selected', newPositions);
     mainServer.socket.emit('wason-selected-'+config.deviceName, newPositions);
     await Helper.sleep(0.5);
@@ -106,6 +106,7 @@ class WasonService {
   }
 
   static async startWasonReal(socket) {
+    WasonService.enableFusible();
     let shift = 1;
     const reactors = [
      {code: 'temp_high#pre_high', label: 'Surchauffe / Surpression', id: ['A', 'B']},
@@ -118,13 +119,16 @@ class WasonService {
     const selectedReactor1 = await WasonService.wasonRealCycle(socket, positions);
     const selectedReactor2 = await WasonService.wasonRealCycle(socket, positions, {previousSelectedPin: selectedReactor1});
     await Helper.sleep(1);
+    WasonService.disableFusible();
   }
 
   static async wasonRealCycle(socket, positions, {previousSelectedPin = null} = {}) {
+  console.log('wasonRealCycle');
     const selectedReactor = await SocketService.waitForEvent('wason-fusible');
+  console.log('selectedReactor', selectedReactor);
     if(previousSelectedPin === selectedReactor) return WasonService.wasonRealCycle(socket, positions, {previousSelectedPin});
     positions.reactors[fusibleToIndex[selectedReactor]].selected = true;
-    const newPositions = {...positions, selectedReactor};
+    const newPositions = {...positions, selectedReactor, type: 'wason'};
     socket.emit('wason-selected', positions);
     SocketService.emitSocketMessage('wason-real-selected', positions);
     return selectedReactor;
@@ -136,7 +140,7 @@ class WasonService {
       WASON_LEARING_BUTTON_2_PIN,
       WASON_LEARING_BUTTON_3_PIN,
       WASON_LEARING_BUTTON_4_PIN], true);
-    return pinToIndex[buttonRecord.channel];
+    return {choice: pinToIndex[buttonRecord.channel], type: 'extinction'};
   }
 
   static async handleFusible(pin) {

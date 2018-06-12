@@ -89,7 +89,7 @@ const mainFlow = [
       new ActionService(() => DeviceService.on(DeviceService.MAGNET_ENTRANCE), 'maintient porte ouverte'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_1), 'Ouverture placard 1'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_2), 'Ouverture placard 2'),
-      new ActionService(() => (SocketService.io.emit('restart'), null), 'Redemarrage des autres services'),
+      new ActionService(() => (SocketService.io.emit('restart'),SocketService.io.emit('counter-reset'), null), 'Redemarrage des autres services'),
   ]),
   new FlowService('Setup', [
       new ActionService(() => Helper.wait(), 'Attente manipulation du game master', { force: 'Effectué' }),
@@ -156,6 +156,7 @@ const mainFlow = [
   new FlowService('Extinction réacteur', [
       new ActionService(() => SoundService.playAndWait('IA_wason_end.mp3', 7), 'IA quel reacteur éteindre ?'),
       new ActionService(() => WasonService.wasonStopReactorChoice(), 'Stop reactor button choice'),
+      new ActionService(() => (SocketService.io.emit('counter-end'), null), 'Arret compteur'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte (securite)'),
       new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'Allumage lumière globale'),
