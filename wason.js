@@ -38,6 +38,12 @@ if (config.deviceName != 'elec') {
   GpioService.declareGpioPin(WASON_LEARING_BUTTON_4_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
 }
 
+const reactorsButtonChoice = [
+ {code: 'temp_high#pre_high', label: 'Surchauffe / Surpression', id: ['1']},
+ {code: 'temp_high#pre_normal', label: 'Surchauffe / Pression normale', id: ['2']},
+ {code: 'temp_normal#pre_high', label: 'Chauffe normale / Surpression', id: ['3']},
+ {code: 'temp_normal#pre_normal', label: 'Chauffe normale / Pression normale', id: ['4']},
+];
 let wasonMode = 'learning';
 let fusibleEnabled = false;
 
@@ -69,13 +75,7 @@ class WasonService {
     console.log('handleWason');
     console.log('waonsMode', wasonMode);
     if (wasonMode === 'real') return WasonService.startWasonReal(socket);
-    const reactors = [
-     {code: 'temp_high#pre_high', label: 'Surchauffe / Surpression', id: ['1']},
-     {code: 'temp_high#pre_normal', label: 'Surchauffe / Pression normale', id: ['2']},
-     {code: 'temp_normal#pre_high', label: 'Chauffe normale / Surpression', id: ['3']},
-     {code: 'temp_normal#pre_normal', label: 'Chauffe normale / Pression normale', id: ['4']},
-    ];
-    const positions = {shift: shift[config.deviceName], reactors};
+    const positions = {shift: shift[config.deviceName], reactors: reactorsButtonChoice};
     socket.emit('wason-selected', positions);
     const selectedReactor1 = await WasonService.wasonLearningCycle(socket, positions);
     const selectedReactor2 = await WasonService.wasonLearningCycle(socket, positions, {previousSelectedPin: selectedReactor1});
@@ -128,19 +128,20 @@ class WasonService {
   console.log('selectedReactor', selectedReactor);
     if(previousSelectedPin === selectedReactor) return WasonService.wasonRealCycle(socket, positions, {previousSelectedPin});
     positions.reactors[fusibleToIndex[selectedReactor]].selected = true;
-    const newPositions = {...positions, selectedReactor, type: 'wason'};
+    const newPositions = {...positions, selectedReactor, button:fusibleToIndex[selectedReactor], type: 'wason'};
     socket.emit('wason-selected', positions);
     SocketService.emitSocketMessage('wason-real-selected', positions);
     return selectedReactor;
   }
 
   static async wasonStopReactorChoice() {
+    let shift = 1;
     const buttonRecord = await GpioService.buttonWasonChanged([
       WASON_LEARING_BUTTON_1_PIN,
       WASON_LEARING_BUTTON_2_PIN,
       WASON_LEARING_BUTTON_3_PIN,
       WASON_LEARING_BUTTON_4_PIN], true);
-    return {choice: pinToIndex[buttonRecord.channel], type: 'extinction'};
+    return {reactor:reactorsButtonChoice, button: pinToIndex[buttonRecord.channel], type: 'wason'};
   }
 
   static async handleFusible(pin) {

@@ -35,10 +35,7 @@ class Main extends React.Component {
 }
 
 class Response extends React.Component {
-  render() {
-    const response = this.props.response;
-    console.log('response', response);
-    if(response.type !== 'crea') return null;
+  renderCrea(response) {
     if(!response.hasData) return (<div>pas de reponse</div>)
     const src=`crea-audio/${response.deviceName}_${response.index}`;
     const duration = Math.round(response.duration/10)/100;
@@ -47,6 +44,31 @@ class Response extends React.Component {
       <p>{duration}s <audio controls src={src}></audio></p>
     </div>
     )
+  }
+  renderWason(response) {
+    const buttonIndex=response.button;
+    if(buttonIndex===undefined) return (<div>pas de reponse</div>)
+    console.log('buttonIndex', buttonIndex);
+    return (
+    <div>
+      {response.reactors[buttonIndex].label}
+    </div>
+    )
+  }
+  renderExtinction(response) {
+    return (
+    <div>
+      choix reacteur {response.choice}
+    </div>
+    )
+  }
+  render() {
+    const response = this.props.response;
+    console.log('response', response);
+    if(response.type === 'crea') return this.renderCrea(response);
+    if(response.type === 'wason') return this.renderWason(response);
+    if(response.type === 'extinction') return this.renderExtinction(response);
+    return null;
   }
 }
 
