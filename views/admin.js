@@ -15,6 +15,15 @@ class Connections extends React.Component {
     return (
       <div className="navbar-nav">
         {connectionsRender}
+        <div className="nav-item">
+          <span 
+              className="badge badge-danger"
+              style={{'cursor':'pointer', 'margin-left': '50px'}}
+              onClick={() => window.confirm("Attention vous allez effacer les données courantes et redémarrer une partie") 
+              ? socket.emit('restart-game') : null}> 
+              Arrêter et redémarrer 
+            </span>
+        </div>
       </div>
     )
   }
@@ -30,7 +39,16 @@ socket.on('connections', connections =>
 class Main extends React.Component {
   render() {
   const flows = this.props.flowList.map(flow => (<Flow key={flow.description} flow={flow}/>));
-  return (<div>{flows}</div>);
+  return (
+  <div>
+    {flows}
+    <a 
+        style={{'margin-left':20}}
+        className="badge badge-primary"
+        href="/download"> Télécharger l'export </a>
+      <br/>
+  </div>
+  );
   }
 }
 

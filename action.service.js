@@ -83,9 +83,9 @@ const generateWasonTrainingActions = () => {
 }
 const mainFlow = [
   new FlowService('Reset Etat', [
-      new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'Allumage lumière globale'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte (securite)'),
+      new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'Allumage lumière globale'),
       new ActionService(() => DeviceService.on(DeviceService.MAGNET_ENTRANCE), 'maintient porte ouverte'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_1), 'Ouverture placard 1'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_2), 'Ouverture placard 2'),

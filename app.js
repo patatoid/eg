@@ -54,6 +54,9 @@ console.log('connection');
     connections.setState(id, true);
     if(id === 'interface') SocketService.io.emit('mainFlow', mainFlow);
     socket.on('disconnect', () => connections.setState(id, false));
+  });
+  socket.on('restart-game', () => {
+    process.exit(0);
   })
 });
 
