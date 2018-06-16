@@ -74,13 +74,13 @@ class Videos extends React.Component {
       <div style={{'margin-left':640, 'margin-top': 50}}>
         <h1 style={{'color':'white'}}>Explication</h1>
         <video width="640" height="480" controls>
-          <source src="videos/test.mp4" type="video/mp4"/>
+          <source src="videos/vid1_moore.mp4" type="video/mp4"/>
         </video>
       </div>
       <div className="row" style={{'margin-left': 120, 'margin-top': 40}}>
-        <Video title="titre 1" src="videos/test.mp4"/>
-        <Video title="titre 2" src="videos/test.mp4"/>
-        <Video title="titre 3" src="videos/test.mp4"/>
+        <Video title="Fuite du liquide radioactif" src="videos/vid4_moore.mp4"/>
+        <Video title="Panne électrique" src="videos/vid3_moore.mp4"/>
+        <Video title="Emballement thermique" src="videos/vid2_moore.mp4"/>
       </div>
     </div>
     );
