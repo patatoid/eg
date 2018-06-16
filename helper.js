@@ -17,8 +17,8 @@ module.exports=class Helper {
     return spawn(...process);
   }
 
-  static openChromium(url) {
-    Helper.launchProcess(['sh', ['./scripts/start-chromium.sh', `http://localhost:3000/${url}`], {env: process.env}])
+  static openChromium(url, {cursor= false} = {} ) {
+    Helper.launchProcess(['sh', ['./scripts/start-chromium.sh', `http://localhost:3000/${url}`, ...(cursor ? [] : ['-nocursor'])], {env: process.env}])
   }
 
   static closeChromium() {

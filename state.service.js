@@ -6,6 +6,7 @@ const connectionsDefaultState = {
   'crea2': false,
   'crea3': false,
   'elec': false,
+  'counter': false,
   'interface': false,
 };
 

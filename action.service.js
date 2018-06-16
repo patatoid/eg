@@ -127,7 +127,7 @@ const mainFlow = [
   ),
   new FlowService('Enigme Base de donnée et ordi central', [
       new ActionService(() => Helper.wait(), 'Attente déclenchement par Game Master', { force: 'Déclencher' }),
-      new ActionService(() => Helper.openChromium('roger.html'), 'Allumage ecran Roger Moore sur identifiant de connection'),
+      new ActionService(() => Helper.openChromium('roger.html', {cursor:true}), 'Allumage ecran Roger Moore sur identifiant de connection'),
       new ActionService(() => SocketService.waitForEvent('session-opened'), 'En attente dévérouillage session'),
     ]
   ),
