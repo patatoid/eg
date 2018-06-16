@@ -16,7 +16,20 @@ class Reactor extends React.Component {
     return (
     <div >
     <div style={{'display': 'none'}} className='identification'>{idsView}</div>
-      <div className={className}>{reactor.label}</div>
+      <div className={className}> </div>
+    </div>
+    )
+  }
+}
+
+class Background extends React.Component {
+  render() {
+    const shift=this.props.shift+1;
+    console.log('shift', shift);
+    const src = `images/animation_${shift}.jpg`
+    return (
+    <div style={{'position':'absolute', top: -200, left: 0}} >
+      <img src={src} style={{'width': 1920}} />
     </div>
     )
   }
@@ -27,7 +40,12 @@ socket.on('wason-selected', function(positions) {
   const shift = positions.shift;
   const reactorsDom = reactors.map((reactor, i) => (<Reactor key={i} reactor={reactors[(i+shift)%4]} />));
   ReactDOM.render(
-    (<div className="container-wrap"> {reactorsDom} </div>),
+    (
+    <div>
+      <Background shift={shift} />
+      <div className="container-wrap"> {reactorsDom} </div>
+    </div>
+    ),
     document.getElementById('main')
   )
 })
