@@ -19,9 +19,16 @@ class Connections extends React.Component {
           <span 
               className="badge badge-danger"
               style={{'cursor':'pointer', 'margin-left': '50px'}}
-              onClick={() => window.confirm("Attention vous allez effacer les données courantes et redémarrer une partie") 
+              onClick={() => window.confirm("Attention vous allez effacer les données courantes et redémarrer une partie de jeu") 
               ? socket.emit('restart-game') : null}> 
               Arrêter et redémarrer 
+            </span>
+          <span 
+              className="badge badge-danger"
+              style={{'cursor':'pointer', 'margin-left': '10px'}}
+              onClick={() => window.confirm("Attention vous allez effacer les données courantes et eteindre tous les appareils. Débrancher puis rebrancher la prise principale pour rallumer l'ensemble") 
+              ? socket.emit('shutdown') : null}> 
+              Eteindre 
             </span>
         </div>
       </div>

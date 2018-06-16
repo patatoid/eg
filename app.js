@@ -55,14 +55,17 @@ console.log('connection');
     if(id === 'interface') SocketService.io.emit('mainFlow', mainFlow);
     socket.on('disconnect', () => connections.setState(id, false));
   });
-  socket.on('restart-game', () => {
-    process.exit(0);
-  })
+  socket.on('restart-game', () => process.exit(0));
+  socket.on('shutdown', () => SocketService.io.emit('shutdown'));
 });
 
 
 mainServer.socket.on('connect', () => {
   mainServer.socket.emit('identification', config.deviceName);
+});
+mainServer.socket.on('shutdown', () => {
+console.log('shutdown');
+  Helper.launchProcess(['sudo', ['shutdown', '-h', 'now']]);
 });
 mainServer.socket.on('restart', () => {
   Helper.closeChromium();
