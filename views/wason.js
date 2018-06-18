@@ -10,12 +10,12 @@ class Reactor extends React.Component {
   render(){
     const reactor = this.props.reactor;
     const className= `reactor ${reactor.selected ? 'selected' : ''}`;
-    const ids = reactor.id;
-    const idsView = ids.map(id => (<Identification key={id} id={id} />))
+    //const ids = reactor.id;
+    //const idsView = ids.map(id => (<Identification key={id} id={id} />))
     console.log('className', className);
     return (
     <div >
-    <div style={{'display': 'none'}} className='identification'>{idsView}</div>
+    <div style={{'display': 'none'}} className='identification'></div>
       <div className={className}> </div>
     </div>
     )
@@ -38,7 +38,7 @@ socket.on('wason-selected', function(positions) {
   console.log('wason-selected', positions);
   const reactors = positions.reactors;
   const shift = positions.shift;
-  const reactorsDom = reactors.map((reactor, i) => (<Reactor key={i} reactor={reactors[(i+shift)%4]} />));
+  const reactorsDom = reactors.map((reactor, i) => (<Reactor key={i} reactor={reactors[i]} />));
   ReactDOM.render(
     (
     <div>

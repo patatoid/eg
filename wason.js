@@ -38,7 +38,34 @@ if (config.deviceName != 'elec') {
   GpioService.declareGpioPin(WASON_LEARING_BUTTON_4_PIN, gpio.DIR_IN, gpio.EDGE_BOTH);
 }
 
-const reactorsButtonChoice = [
+const reactorsButtonChoice = {
+  main: [
+   {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu', id: [1]},
+   {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale', id: [2]},
+   {code: 'unknown#pre_high', label: 'Inconnu / Surpression', id: [3]},
+   {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu', id: [4]},
+  ],
+  crea1: [
+   {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale'},
+   {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu' },
+   {code: 'unknown#pre_high', label: 'Inconnu / Surpression'},
+   {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu'},
+  ],
+  crea2: [
+   {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale'},
+   {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu' },
+   {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu'},
+   {code: 'unknown#pre_high', label: 'Inconnu / Surpression'},
+  ],
+  crea3: [
+   {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu' },
+   {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale'},
+   {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu'},
+   {code: 'unknown#pre_high', label: 'Inconnu / Surpression'},
+  ]
+  }
+
+const reactorsStop = [
  {code: 'temp_high#pre_high', label: 'Surchauffe / Surpression', id: ['1']},
  {code: 'temp_high#pre_normal', label: 'Surchauffe / Pression normale', id: ['2']},
  {code: 'temp_normal#pre_high', label: 'Chauffe normale / Surpression', id: ['3']},
@@ -75,7 +102,7 @@ class WasonService {
     console.log('handleWason');
     console.log('waonsMode', wasonMode);
     if (wasonMode === 'real') return WasonService.startWasonReal(socket);
-    const positions = {shift: shift[config.deviceName], reactors: reactorsButtonChoice};
+    const positions = {shift: shift[config.deviceName], reactors: reactorsButtonChoice[config.deviceName]};
     socket.emit('wason-selected', positions);
     const selectedReactor1 = await WasonService.wasonLearningCycle(socket, positions);
     const selectedReactor2 = await WasonService.wasonLearningCycle(socket, positions, {previousSelectedPin: selectedReactor1});
@@ -141,7 +168,7 @@ class WasonService {
       WASON_LEARING_BUTTON_2_PIN,
       WASON_LEARING_BUTTON_3_PIN,
       WASON_LEARING_BUTTON_4_PIN], true);
-    return {reactor:reactorsButtonChoice, button: pinToIndex[buttonRecord.channel], type: 'wason'};
+    return {reactor:reactorsStop, button: pinToIndex[buttonRecord.channel], type: 'wason'};
   }
 
   static async handleFusible(pin) {

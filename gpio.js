@@ -1,11 +1,11 @@
-const gpio = require('rpi-gpio');
-//class gpio {
-//   static get DIR_IN() {}
-//   static get EDGE_BOTH() {}
-//   static setup() { }
-//   static on() { }
-//}
+//const gpio = require('rpi-gpio');
 const EventEmitter = require('events');
+class gpio {
+   static get DIR_IN() {}
+   static get EDGE_BOTH() {}
+   static setup() { }
+   static on() { }
+}
 const gpioListener = new EventEmitter();
 gpioListener.setMaxListeners(50);
 
@@ -49,4 +49,5 @@ class GpioService {
 module.exports = {
   gpio,
   GpioService,
+  gpioListener,
 }
