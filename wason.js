@@ -46,22 +46,22 @@ const reactorsButtonChoice = {
    {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu', id: [4]},
   ],
   crea1: [
-   {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale'},
-   {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu' },
-   {code: 'unknown#pre_high', label: 'Inconnu / Surpression'},
-   {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu'},
+   {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale', id: []},
+   {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu' , id: []},
+   {code: 'unknown#pre_high', label: 'Inconnu / Surpression', id: []},
+   {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu', id: []},
   ],
   crea2: [
-   {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale'},
-   {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu' },
-   {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu'},
-   {code: 'unknown#pre_high', label: 'Inconnu / Surpression'},
+   {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale', id: []},
+   {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu' , id: []},
+   {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu', id: []},
+   {code: 'unknown#pre_high', label: 'Inconnu / Surpression', id: []},
   ],
   crea3: [
-   {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu' },
-   {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale'},
-   {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu'},
-   {code: 'unknown#pre_high', label: 'Inconnu / Surpression'},
+   {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu' , id: []},
+   {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale', id: []},
+   {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu', id: []},
+   {code: 'unknown#pre_high', label: 'Inconnu / Surpression', id: []},
   ]
   }
 
@@ -136,10 +136,10 @@ class WasonService {
     WasonService.enableFusible();
     let shift = 1;
     const reactors = [
-     {code: 'temp_high#pre_high', label: 'Surchauffe / Surpression', id: ['A', 'B']},
-     {code: 'temp_high#pre_normal', label: 'Surchauffe / Pression normale', id: ['C', 'D']},
-     {code: 'temp_normal#pre_high', label: 'Chauffe normale / Surpression', id: ['E', 'F']},
-     {code: 'temp_normal#pre_normal', label: 'Chauffe normale / Pression normale', id: ['G', 'H']},
+     {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale', id: ['A', 'B']},
+     {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu', id: ['C', 'D']},
+     {code: 'unknown#pre_high', label: 'Inconnu / Surpression', id: ['E', 'F']},
+     {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu', id: ['G', 'H']},
     ];
     const positions = {shift, reactors};
     socket.emit('wason-selected', positions);
