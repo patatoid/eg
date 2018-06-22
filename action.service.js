@@ -154,6 +154,7 @@ const mainFlow = [
       new ActionService(() => SocketService.waitForEvent('wason-real-selected'), 'Attente insertion fusible 2'),
   ]),
   new FlowService('Extinction réacteur', [
+      new ActionService(() => (SocketService.io.emit('wason-animation'), null), 'Affichage de l\'animation reacteurs'),
       new ActionService(() => SoundService.playAndWait('IA_wason_end.mp3', 7), 'IA quel reacteur éteindre ?'),
       new ActionService(() => WasonService.wasonStopReactorChoice(), 'Stop reactor button choice'),
       new ActionService(() => (SocketService.io.emit('counter-end'), null), 'Arret compteur'),

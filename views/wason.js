@@ -49,6 +49,18 @@ socket.on('wason-selected', function(positions) {
     document.getElementById('main')
   )
 })
+socket.on('wason-animation', function() {
+  ReactDOM.render(
+    (
+    <div>
+      <video width="1920" height="1080" autoPlay={true}>
+        <source src="videos/animation.mp4" type="video/mp4"/>
+      </video>
+    </div>
+    ),
+    document.getElementById('main')
+  )
+});
 const launchSocket = () => {
   socket.emit('wason-connected');
 }

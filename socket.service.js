@@ -1,5 +1,6 @@
-const { io } = require('./server');
 const EventEmitter = require('events');
+const { io } = require('./server');
+const { app } = require('./server');
 const socketListener = new EventEmitter();
 socketListener.setMaxListeners(50);
 
@@ -18,5 +19,11 @@ class SocketService {
     })
   }
 }
+
+
+app.get('/socket/:message/:data', function(req, res) {
+  SocketService.emitSocketMessage(req.params.message, req.params.data);
+  res.send('ok socket');
+})
 
 module.exports = { SocketService }

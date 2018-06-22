@@ -32,6 +32,7 @@ app.get('/gpio/:channel/:state', function(req, res) {
   res.send('ok->'+toEmit);
 })
 
+
 http.listen(config.port, () => console.log(`app listening on port ${config.port}!`));
 const mainServer = new MainServerService(config.mainServer);
 
