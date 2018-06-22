@@ -14,7 +14,8 @@ const ACTION_STATE = {
 
 const ACTION_TYPE = {
   SERIE: 'serie',
-  PARALLEL: 'parallel'
+  PARALLEL: 'parallel',
+  PARALLEL_RACE: 'parallel_race',
 }
 
 
@@ -35,6 +36,8 @@ class FlowService {
    await FlowService.executePromises(this.actions);
   } else if( this.type === ACTION_TYPE.PARALLEL) {
    await Promise.all(this.actions.map(action => action.execute()));
+  } else if( this.type === ACTION_TYPE.PARALLEL_RACE) {
+   await Promise.race(this.actions.map(action => action.execute()));
   }
  }
 }
@@ -81,6 +84,9 @@ const generateWasonTrainingActions = () => {
     return new FlowService(`ordinateur ${device}`, actions);
   });
 }
+
+let finalReactorChoice = null;
+
 const mainFlow = [
   new FlowService('Reset Etat', [
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
@@ -152,16 +158,27 @@ const mainFlow = [
       new ActionService(() => SocketService.waitForEvent('wason-connected'), 'processus démarrés'),
       new ActionService(() => SocketService.waitForEvent('wason-real-selected'), 'Attente insertion fusible 1'),
       new ActionService(() => SocketService.waitForEvent('wason-real-selected'), 'Attente insertion fusible 2'),
+      new ActionService(() => Helper.sleep(3), 'pause 3s'),
   ]),
   new FlowService('Extinction réacteur', [
       new ActionService(() => (SocketService.io.emit('wason-animation'), null), 'Affichage de l\'animation reacteurs'),
       new ActionService(() => SoundService.playAndWait('IA_wason_end.mp3', 7), 'IA quel reacteur éteindre ?'),
-      new ActionService(() => WasonService.wasonStopReactorChoice(), 'Stop reactor button choice'),
-      new ActionService(() => (SocketService.io.emit('counter-end'), null), 'Arret compteur'),
-      new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
-      new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte (securite)'),
-      new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'Allumage lumière globale'),
-      new ActionService(() => SoundService.playAndWait('IA_end_good.mp3', 6), 'IA succés. End'),
+      new ActionService(async () => finalReactorChoice = await WasonService.wasonStopReactorChoice(), 'Choix bouton stop reacteur'),
+      new FlowService('Fin', [
+        new FlowService('Ouverture porte', [
+          new ActionService(() => (SocketService.io.emit('counter-end'), null), 'Arret compteur'),
+          new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
+          new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte (securite)'),
+        ]),
+        new FlowService('IA succés', [
+          new ActionService(() => Helper.predicate(finalReactorChoice.button === 0), 'continue si reacteur = 1 '),
+          new ActionService(() => SoundService.playAndWait('IA_end_good.mp3', 6), 'IA succés. End'),
+        ]),
+        new FlowService('IA echec', [
+          new ActionService(() => Helper.predicate(finalReactorChoice.button !== 0), 'continu si reacteur != 1'),
+          new ActionService(() => SoundService.playAndWait('IA_end_bad.mp3 ', 4), 'IA echec. End'),
+        ]),
+      ], ACTION_TYPE.PARALLEL_RACE),
   ]),
 ];
 

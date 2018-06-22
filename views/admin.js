@@ -73,6 +73,7 @@ class Response extends React.Component {
   renderWason(response) {
     const buttonIndex=response.button;
     if(buttonIndex===undefined) return (<div>pas de reponse</div>)
+    console.log('response', response)
     console.log('buttonIndex', buttonIndex);
     return (
     <div>
@@ -138,7 +139,7 @@ class Flow extends React.Component {
   render() {
     const flow = this.props.flow;
     const actions = flow.actions.map(action => <Action key={action.description} type={flow.type} action={action}/>);
-    if(flow.type==='parallel') {
+    if(flow.type==='parallel' || flow.type==='parallel_race' ) {
     return (
     <div>
       <p className="card-text" style={{margin: 0}}>{flow.description}</p>

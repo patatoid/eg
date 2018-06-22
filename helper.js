@@ -13,6 +13,11 @@ module.exports=class Helper {
     return new Promise((resolve, reject) => null);
   }
 
+  static async predicate(condition) {
+    if(condition) return;
+    await Helper.wait();
+  }
+
   static launchProcess(process) {
     return spawn(...process);
   }

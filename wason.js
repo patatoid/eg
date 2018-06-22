@@ -155,20 +155,23 @@ class WasonService {
   console.log('selectedReactor', selectedReactor);
     if(previousSelectedPin === selectedReactor) return WasonService.wasonRealCycle(socket, positions, {previousSelectedPin});
     positions.reactors[fusibleToIndex[selectedReactor]].selected = true;
-    const newPositions = {...positions, selectedReactor, button:fusibleToIndex[selectedReactor], type: 'wason'};
-    socket.emit('wason-selected', positions);
-    SocketService.emitSocketMessage('wason-real-selected', positions);
+    const newPositions = {...positions, selectedReactor, button: fusibleToIndex[selectedReactor], type: 'wason'};
+    socket.emit('wason-selected', newPositions);
+    SocketService.emitSocketMessage('wason-real-selected', newPositions);
     return selectedReactor;
   }
 
   static async wasonStopReactorChoice() {
-    let shift = 1;
+    let shift = 0;
     const buttonRecord = await GpioService.buttonWasonChanged([
       WASON_LEARING_BUTTON_1_PIN,
       WASON_LEARING_BUTTON_2_PIN,
       WASON_LEARING_BUTTON_3_PIN,
       WASON_LEARING_BUTTON_4_PIN], true);
-    return {reactor:reactorsStop, button: pinToIndex[buttonRecord.channel], type: 'wason'};
+    const reactors = reactorsStop;
+    const selectedReactor=pinToIndex[buttonRecord.channel];
+    reactors[selectedReactor].selected = true;
+    return {shift, reactors, button: selectedReactor, type: 'wason'};
   }
 
   static async handleFusible(pin) {
