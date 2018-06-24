@@ -5,7 +5,6 @@ const archiver = require('archiver');
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const config = require('./config');
-const { creaRecords } = require('./admin');
 const { MainServerService } = require('./main.server.service');
 const { gpioListener } = require('./gpio');
 
@@ -16,6 +15,7 @@ app.get('/download', function (req, res) {
   const archive = archiver('zip');
   res.attachment('jeu.zip');
   archive.pipe(res);
+  const { creaRecords } = require('./admin');
   _.forEach(creaRecords, (value, key) => archive.append(value, { name: `${key}.wav` }));
 
   const { mainFlow } = require('./action.service');
