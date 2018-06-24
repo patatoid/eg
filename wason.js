@@ -176,7 +176,7 @@ class WasonService {
 
   static async handleFusible(pin) {
     console.log('handleFusible', pin);
-    if(!fusibleEnabled) await SoundService.playAndWait('IA_fusible.mp3', 6);
+    if(!fusibleEnabled) await SoundService.playAndWait('IA_fusible.mp3', 4);
   }
 }
 
