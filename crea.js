@@ -37,7 +37,7 @@ class CreaService {
     const timeout = async (time) => { const duration = await Helper.sleep(time); return {duration: time, data: null}};
     const creaRecord = await Promise.race([
       CreaService.buttonEvent(cycleStartTime),
-      timeout(10),
+      timeout(30),
     ]);
     const { mainServer } = require('./server');
     mainServer.socket.emit('crea-record-'+config.deviceName, {...creaRecord, index, words: wordsSent, deviceName});
