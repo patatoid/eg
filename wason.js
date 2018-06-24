@@ -25,10 +25,10 @@ const pinToIndex = {
 }
 
 const shift = {
-  'main': 0,
+  'main': 1,
   'crea1': 2,
-  'crea2': 1,
-  'crea3': 3,
+  'crea2': 3,
+  'crea3': 4,
 }
 
 if (config.deviceName != 'elec') {
@@ -134,7 +134,7 @@ class WasonService {
 
   static async startWasonReal(socket) {
     WasonService.enableFusible();
-    let shift = 1;
+    let shift = 5;
     const reactors = [
      {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale', id: ['A', 'B']},
      {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu', id: ['C', 'D']},
@@ -162,7 +162,7 @@ class WasonService {
   }
 
   static async wasonStopReactorChoice() {
-    let shift = 0;
+    let shift = 1;
     const buttonRecord = await GpioService.buttonWasonChanged([
       WASON_LEARING_BUTTON_1_PIN,
       WASON_LEARING_BUTTON_2_PIN,

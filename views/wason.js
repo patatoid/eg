@@ -24,7 +24,7 @@ class Reactor extends React.Component {
 
 class Background extends React.Component {
   render() {
-    const shift=this.props.shift+1;
+    const shift=this.props.shift;
     console.log('shift', shift);
     const src = `images/animation_${shift}.jpg`
     return (
