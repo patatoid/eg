@@ -30,7 +30,7 @@ class Identification extends React.Component {
      {
        this.props.onConnect();
      } else {
-       this.setState({error: 'Indentifiant ou mdp incorrecte !'})
+       this.setState({error: 'Indentifiant ou mdp incorrect !'})
      }
     }
     return (
