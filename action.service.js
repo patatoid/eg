@@ -106,8 +106,8 @@ const mainFlow = [
   new FlowService('Mise en situation', [
       new ActionService(() => Helper.wait(), 'Attente demarrage', { force: 'Demarrer' }),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_ENTRANCE), 'fermeture porte'),
-      new ActionService(() => Helper.sleep(5), '5s fermeture porte'),
       new ActionService(() => DeviceService.on(DeviceService.MAGNET_LOCK), 'verouillage porte'),
+      new ActionService(() => Helper.sleep(2), '2s fermeture porte'),
       new ActionService(() => DeviceService.off(DeviceService.GLOBAL_LIGHT), 'extinction lumière globale'),
       new ActionService(() => DeviceService.on(DeviceService.GYRO), 'Allumage gyro'),
       new ActionService(() => (SocketService.io.emit('counter-start'), null), 'Demarrage compteur'),
@@ -171,6 +171,7 @@ const mainFlow = [
           new ActionService(() => (SocketService.io.emit('counter-end'), null), 'Arret compteur'),
           new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
           new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte (securite)'),
+          new ActionService(() => DeviceService.on(DeviceService.MAGNET_ENTRANCE), 'maintient porte ouverte'),
         ]),
         new FlowService('IA succés', [
           new ActionService(() => Helper.predicate(finalReactorChoice.button === 0), 'continue si reacteur = 1 '),
