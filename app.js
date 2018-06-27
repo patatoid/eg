@@ -124,6 +124,10 @@ if(config.deviceName === 'crea1' || config.deviceName === 'crea3') {
   })
 }
 
+if (config.deviceName === 'counter') {
+  setTimeout(() => Helper.launchProcess(['sh', ['./scripts/start-chromium.sh', `http://${config.mainServer}:3000/counter.html`, '-nocursor']]), 3000);
+}
+
 if(!config.deviceName) {
   console.log('you have to specify a device name ! ');
   process.exit(1)

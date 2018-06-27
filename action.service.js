@@ -92,6 +92,7 @@ const mainFlow = [
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_LOCK), 'deverouillage porte (securite)'),
       new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'Allumage lumière globale'),
+      new ActionService(() => DeviceService.off(DeviceService.GYRO), 'Eteindre gyro'),
       new ActionService(() => DeviceService.on(DeviceService.MAGNET_ENTRANCE), 'maintient porte ouverte'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_1), 'Ouverture placard 1'),
       new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_2), 'Ouverture placard 2'),
@@ -108,6 +109,7 @@ const mainFlow = [
       new ActionService(() => Helper.sleep(5), '5s fermeture porte'),
       new ActionService(() => DeviceService.on(DeviceService.MAGNET_LOCK), 'verouillage porte'),
       new ActionService(() => DeviceService.off(DeviceService.GLOBAL_LIGHT), 'extinction lumière globale'),
+      new ActionService(() => DeviceService.on(DeviceService.GYRO), 'Allumage gyro'),
       new ActionService(() => (SocketService.io.emit('counter-start'), null), 'Demarrage compteur'),
       new ActionService(() => (SocketService.io.emit('screen', 'berserk'), null), 'Ecrans berserk'),
       new ActionService(() => SoundService.playAndWait(SoundService.siren, 10), 'sirene 10s'),
@@ -118,6 +120,7 @@ const mainFlow = [
       new ActionService(() => SocketService.waitForEvent('elec-breaker-on'), 'En attente manipulation coffret electrique joueur'),
       new ActionService(() => (SocketService.io.emit('screen', 'elec_restored'), null), 'Ecrans backup generator restored'),
       new ActionService(() => DeviceService.on(DeviceService.GLOBAL_LIGHT), 'rallumage lumière globale'),
+      new ActionService(() => DeviceService.off(DeviceService.GYRO), 'Extinction gyro'),
       new ActionService(() => SoundService.playAndWait('IA_light.mp3', 9), 'IA parle bizarrement'),
     ]
   ),
@@ -132,25 +135,24 @@ const mainFlow = [
     ]
   ),
   new FlowService('Enigme Base de donnée et ordi central', [
-      new ActionService(() => Helper.wait(), 'Attente déclenchement par Game Master', { force: 'Déclencher' }),
       new ActionService(() => Helper.openChromium('roger.html', {cursor:true}), 'Allumage ecran Roger Moore sur identifiant de connection'),
       new ActionService(() => SocketService.waitForEvent('session-opened'), 'En attente dévérouillage session'),
     ]
   ),
-  new FlowService('Enigme 4 clés', [
-      new ActionService(() => Helper.wait(), 'Attente déclenchement par Game Master', { force: 'Déclencher' }),
-      new ActionService(() => SocketService.waitForEvent('keys-inserted'), 'Attente insertion 4 clés'),
-      new ActionService(() => Helper.closeChromium(), 'extinction ecran roger'),
-      new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_2), 'Ouverture placard 2'),
-      new ActionService(() => SoundService.playAndWait('IA_placard.mp3', 3), 'IA placard dévérouillé'),
-    ]
-  ),
   new FlowService('Enigme Wason entrainement', [
+      new ActionService(() => Helper.wait(), 'Attente déclenchement par Game Master', { force: 'Déclencher' }),
+      new ActionService(() => Helper.closeChromium(), 'extinction ecran roger'),
+      new ActionService(() => Helper.sleep(3), 'pause 3s'),
       new ActionService(() => (WasonService.mode='training', SocketService.io.emit('start-wason-training'), null), 'Demarrage des processus pour enigme wason entrainement'),
       new ActionService(() => SocketService.waitForEvent('wason-connected'), 'processus démarrés'),
       new ActionService(() => SoundService.playAndWait('IA_training_begin.mp3', 6), 'IA la procédure d\'entrainement va commencer'),
       new FlowService('Resultats', generateWasonTrainingActions(), ACTION_TYPE.PARALLEL),
-      new ActionService(() => Helper.sleep(5), 'pause 5s'),
+      new ActionService(() => DeviceService.off(DeviceService.MAGNET_CLOSET_2), 'Ouverture placard 2'),
+      new ActionService(() => SoundService.playAndWait('IA_placard.mp3', 3), 'IA placard dévérouillé'),
+    ]
+  ),
+  new FlowService('Enigme 4 clés', [
+      new ActionService(() => SocketService.waitForEvent('keys-inserted'), 'Attente insertion 4 clés'),
     ]
   ),
   new FlowService('Enigme Wason', [
