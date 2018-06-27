@@ -133,7 +133,7 @@ if(!config.deviceName) {
   process.exit(1)
 } else {
   Helper.closeChromium();
-  setInterval(() => Helper.launchProcess(['xset', ['-dpms']], {env: {DISPLAY: ':0,0'}}), 60000);
+  setTimeout(() => Helper.launchProcess(['xset', ['-dpms'], {env: {...process.env, DISPLAY: ':0,0'}}]), 1000);
 }
 
 if(config.deviceName === 'main') {
