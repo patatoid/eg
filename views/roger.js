@@ -26,7 +26,7 @@ class Identification extends React.Component {
     const connect = () => {
      const login = this.login.value.trim();
      const mdp = this.mdp.value.trim();
-     if (login === 'MOORE Roger' && mdp === 'B1563K3784B1289N2587E7652U4796')
+     if (login === 'MOORE Roger' && mdp === 'A5278N3910V8982A1335U3877U6413')
      {
        this.props.onConnect();
      } else {
