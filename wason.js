@@ -136,8 +136,8 @@ class WasonService {
     WasonService.enableFusible();
     let shift = 5;
     const reactors = [
-     {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale', id: ['A', 'B']},
-     {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu', id: ['C', 'D']},
+     {code: 'temp_high#unkown', label: 'Surchauffe / Inconnu', id: ['A', 'B']},
+     {code: 'unknown#pre_normal', label: 'Inconnu / Pression normale', id: ['C', 'D']},
      {code: 'unknown#pre_high', label: 'Inconnu / Surpression', id: ['E', 'F']},
      {code: 'temp_normal#unknown', label: 'Chauffe normale / Inconnu', id: ['G', 'H']},
     ];
