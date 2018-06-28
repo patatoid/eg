@@ -179,7 +179,9 @@ const mainFlow = [
         ]),
         new FlowService('IA echec', [
           new ActionService(() => Helper.predicate(finalReactorChoice.button !== 0), 'continu si reacteur != 1'),
-          new ActionService(() => SoundService.playAndWait('IA_end_bad.mp3 ', 4), 'IA echec. End'),
+          new ActionService(() => SoundService.playAndWait('IA_end_bad.mp3', 4), 'IA echec. End'),
+          new ActionService(() => DeviceService.off(DeviceService.GLOBAL_LIGHT), 'extinction lumière globale'),
+          new ActionService(() => DeviceService.on(DeviceService.GYRO), 'Allumage gyro'),
         ]),
       ], ACTION_TYPE.PARALLEL_RACE),
   ]),
