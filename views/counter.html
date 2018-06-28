@@ -49,6 +49,7 @@
     }
   }
    const interval = setInterval(() => {
+     if(stopped) return;
      if(startTime === 0) return;
       ReactDOM.render(
         <Timer/>,
