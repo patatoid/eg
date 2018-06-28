@@ -8,7 +8,8 @@ printf '
 
 
 
-Power restored from backup generator. Problems persist.
+Power restored from backup generator. Problems persist...
+Electricité restaurée par le générateur de secours. Des problèmes persistent...
 
 
 
