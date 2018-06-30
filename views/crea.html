@@ -17,12 +17,21 @@
       margin-top: 100px;
       text-align: center;
     }
+    body {
+      overflow: hidden;
+    }
   </style>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <script>
     var socket = io();
     socket.emit('crea-connected');
     socket.on('words', function(words){
+      if(words[0]==='oui micro') {
+        document.getElementById("image").style.display = "default";
+        document.getElementById("image").src="images/consigne_crea.jpg";
+        return;
+      }
+      document.getElementById("image").style.display = "none"
       for(var i=1; i<words.length; i++){
         document.getElementById(i.toString()).innerHTML=words[i];
       }
@@ -31,7 +40,8 @@
 </head>
 
 <body>
-  <div class="container">
+  <img style="width: 1920; height: 1080;" id='image' />
+  <div class="container" id="container">
     <h1 style="color:black" id="1"></h1>
     <h1 style="color:black" id="2"></h1>
     <h1 style="width: 1800px;">?</h1>

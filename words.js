@@ -1,5 +1,6 @@
 const words = { 
   main: [
+    ['oui micro', 'oui micro', 'oui micro', 'oui micro'],
     ['journal', 'article', 'annoncer', 'papier'],
     ['cœur', 'raison', 'poitrine', 'briser'],
     ['réfléchir', 'penser', 'hésiter', 'étudier'],
@@ -12,6 +13,7 @@ const words = {
     ['espoir', 'lendemain', 'vert', 'croire'],
   ],
   crea1: [
+    ['oui micro', 'oui micro', 'oui micro', 'oui micro'],
     ['courrier', 'recevoir', 'relever', 'envelopper'],
     ['cacher', 'poche', 'honte', 'masque'],
     ['cheval', 'animal', 'digne', 'bataille'],
@@ -24,6 +26,7 @@ const words = {
     ['légume', 'frais', 'pousser', 'haricot'],
   ],
   crea2: [
+    ['oui micro', 'oui micro', 'oui micro', 'oui micro'],
     ['travailler', 'occuper', 'apprendre', 'bureau'],
     ['cheveux', 'brun', 'tête', 'lisser'],
     ['soldat', 'compagnie', 'officier', 'inconnu'],
@@ -36,6 +39,7 @@ const words = {
     ['crayon', 'écrire', 'pointe', 'feuille'],
   ],
   crea3: [
+    ['oui micro', 'oui micro', 'oui micro', 'oui micro'],
     ['montagne', 'rocher', 'sommet', 'chaîne'],
     ['médecin', 'examiner', 'guérisseur', 'cabinet'],
     ['cadeau', 'offrir', 'surprendre', 'envelopper'],
