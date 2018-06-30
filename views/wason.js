@@ -62,7 +62,15 @@ socket.on('wason-animation', function() {
   )
 });
 const launchSocket = () => {
-  socket.emit('wason-connected');
+  setTimeout(() => socket.emit('wason-connected'), 25000);
+  ReactDOM.render(
+    (
+    <div style={{'overflow': 'hidden'}}>
+      <img style={{'width': 1920, 'height': 1080}} src='images/consigne_wason.jpg' />
+    </div>
+    ),
+    document.getElementById('main')
+  )
 }
 launchSocket();
 socket.on('connect', () => launchSocket());

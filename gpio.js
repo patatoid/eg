@@ -1,11 +1,11 @@
-//const gpio = require('rpi-gpio');
+const gpio = require('rpi-gpio');
 const EventEmitter = require('events');
-class gpio {
-   static get DIR_IN() {}
-   static get EDGE_BOTH() {}
-   static setup() { }
-   static on() { }
-}
+//class gpio {
+//   static get DIR_IN() {}
+//   static get EDGE_BOTH() {}
+//   static setup() { }
+//   static on() { }
+//}
 const gpioListener = new EventEmitter();
 gpioListener.setMaxListeners(50);
 
