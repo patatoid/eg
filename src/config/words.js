@@ -1,4 +1,4 @@
-const words = { 
+const words = {
   main: [
     ['oui micro', 'oui micro', 'oui micro', 'oui micro'],
     ['journal', 'article', 'annoncer', 'papier'],
@@ -10,7 +10,7 @@ const words = {
     ['vêtement', 'affaire', 'robe', 'mettre'],
     ['trou', 'fond', 'creuser', 'tomber'],
     ['vent', 'voile', 'emporter', 'pluie'],
-    ['espoir', 'lendemain', 'vert', 'croire'],
+    ['espoir', 'lendemain', 'vert', 'croire']
   ],
   crea1: [
     ['oui micro', 'oui micro', 'oui micro', 'oui micro'],
@@ -23,7 +23,7 @@ const words = {
     ['heure', 'demi', 'minute', 'attendre'],
     ['poubelle', 'sac', 'jeter', 'odeur'],
     ['film', 'tourner', 'action', 'personnage'],
-    ['légume', 'frais', 'pousser', 'haricot'],
+    ['légume', 'frais', 'pousser', 'haricot']
   ],
   crea2: [
     ['oui micro', 'oui micro', 'oui micro', 'oui micro'],
@@ -36,7 +36,7 @@ const words = {
     ['marcher', 'pied', 'avancer', 'promener'],
     ['tribu', 'indigène', 'chef', 'groupe'],
     ['erreur', 'faute', 'problème', 'recommencer'],
-    ['crayon', 'écrire', 'pointe', 'feuille'],
+    ['crayon', 'écrire', 'pointe', 'feuille']
   ],
   crea3: [
     ['oui micro', 'oui micro', 'oui micro', 'oui micro'],
@@ -49,7 +49,7 @@ const words = {
     ['trésor', 'découvrir', 'carte', 'creuser'],
     ['dos', 'ventre', 'arrière', 'tourner'],
     ['chant', 'oiseau', 'parole', 'poésie'],
-    ['histoire', 'civilisation', 'époque', 'personnage'],
+    ['histoire', 'civilisation', 'époque', 'personnage']
   ]
- };
-module.exports = words;
+}
+module.exports = words
