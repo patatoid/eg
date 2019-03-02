@@ -11,7 +11,7 @@ class SoundService {
   static get siren () { return siren }
 
   static play (sound) {
-    const music = '../../assets/sounds/' + sound
+    const music = './assets/sounds/' + sound
     Helper.launchProcess(['mpg123', [music]])
   }
 
