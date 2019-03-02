@@ -1,16 +1,17 @@
 const _ = require('lodash');
 const execa = require('execa');
-const { gpio, GpioService } = require('./gpio');
-const config = require('./config');
-const { AdminService } = require('./admin');
-const Helper = require('./helper');
-const { SocketService } = require('./socket.service');
-const { CreaService } = require('./crea');
-const { WasonService } = require('./wason');
-const { StateService, connections } = require('./state.service');
-const { mainFlow, FlowService } = require('./action.service');
-const { mainServer } = require('./server');
-const { KeysService } = require('./keys');
+const gpio = require('rpi-gpio');
+const { GpioService } = require('./src/services/gpio.service');
+const config = require('./src/config/config');
+const { AdminService } = require('./src/services/admin.service');
+const Helper = require('./src/helper');
+const { SocketService } = require('./src/services/socket.service');
+const { CreaService } = require('./src/services/crea.service');
+const { WasonService } = require('./src/services/wason.service');
+const { StateService, connections } = require('./src/services/state.service');
+const { mainFlow, FlowService } = require('./src/services/action.service');
+const { mainServer } = require('./src/server');
+const { KeysService } = require('./src/config/keys');
 
 const creaReacordSave = (socket, name) => {
   socket.on(name, (record) => {

@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "standard",
+    "plugin:require-path-exists/recommended"
+  ],
+  "plugins": [
+    "require-path-exists"
+  ]
+}

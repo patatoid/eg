@@ -1,4 +1,4 @@
-const { SocketService } = require('./socket.service');
+const { SocketService } = require('../services/socket.service');
 
 const keys = [2000,0,0,0];
 
