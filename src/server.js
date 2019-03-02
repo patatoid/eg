@@ -12,6 +12,8 @@ const { gpioListener } = require('./services/gpio.service')
 app.use(express.static(path.join(__dirname, '../front.old/views')))
 app.use(express.static(path.join(__dirname, '../front.old/static')))
 
+app.use('/new', express.static(path.join(__dirname, '../front.vue')))
+
 app.get('/download', function (req, res) {
   const archive = archiver('zip')
   res.attachment('jeu.zip')
@@ -19,7 +21,7 @@ app.get('/download', function (req, res) {
   const { creaRecords } = require('./services/admin.service')
   _.forEach(creaRecords, (value, key) => archive.append(value, { name: `${key}.wav` }))
 
-  const { mainFlow } = require('./action.service')
+  const { mainFlow } = require('./services/action.service')
   archive.append(Buffer.from(JSON.stringify(mainFlow), 'utf-8'), { name: 'actions.json' })
   archive.finalize()
 })
