@@ -10,13 +10,20 @@ git remote add pascal https://github.com/patatoid/eg.git
 git remote remove local
 git remote add local /home/pi/escape-game.git
 git stash
-git pull --rebase pascal master
+git reset --hard HEAD^^^^^
+git pull --rebase pascal nuclea-console
 
 echo 'push to local repository'
-git push local master
+git push -f local master
 
-echo 'pacakging application'
-npm i --production
+# echo 'pacakging application'
+# npm i --production
+
+# echo 'building front'
+# cd ./front.vue
+# npm i
+# npm run build
+# sed s/\$\{DEVICE_NAME\}/$DEVICE_NAME/ -i ./front.vue/dist/js/app.*.js
 
 echo 'starting service'
 sudo service eg start
@@ -32,11 +39,17 @@ cd /home/pi/escape-game
 git remote remove local
 git remote add local ssh://pi@192.168.0.2/home/pi/escape-game.git
 git stash
+git reset --hard HEAD^^^
 git pull --rebase local master
 
-echo 'packaging application'
-rm -rf ./node_modules
-scp -r pi@192.168.0.2:/home/pi/escape-game/node_modules ./node_modules
+# echo 'packaging application'
+# rm -rf ./node_modules
+# scp -r pi@192.168.0.2:/home/pi/escape-game/node_modules ./node_modules
+
+# echo 'building front'
+# rm -rf ./front.vue/dist
+# scp -r pi@192.168.0.2:/home/pi/escape-game/front.vue/dist ./front.vue/dist
+# sed s/\$\{DEVICE_NAME\}/$DEVICE_NAME/ -i ./front.vue/dist/js/app.*.js
 
 echo 'starting service'
 sudo service eg start
@@ -52,11 +65,17 @@ cd /home/pi/escape-game
 git remote remove local
 git remote add local ssh://pi@192.168.0.2/home/pi/escape-game.git
 git stash
+git reset --hard HEAD^^^
 git pull --rebase local master
 
-echo 'packaging application'
-rm -rf ./node_modules
-scp -r pi@192.168.0.2:/home/pi/escape-game/node_modules ./node_modules
+# echo 'packaging application'
+# rm -rf ./node_modules
+# scp -r pi@192.168.0.2:/home/pi/escape-game/node_modules ./node_modules
+
+# echo 'building front'
+# rm -rf ./front.vue/dist
+# scp -r pi@192.168.0.2:/home/pi/escape-game/front.vue/dist ./front.vue/dist
+# sed s/\$\{DEVICE_NAME\}/$DEVICE_NAME/ -i ./front.vue/dist/js/app.*.js
 
 echo 'starting service'
 sudo service eg start
@@ -72,11 +91,17 @@ cd /home/pi/escape-game
 git remote remove local
 git remote add local ssh://pi@192.168.0.2/home/pi/escape-game.git
 git stash
+git reset --hard HEAD^^^
 git pull --rebase local master
 
-echo 'packaging application'
-rm -rf ./node_modules
-scp -r pi@192.168.0.2:/home/pi/escape-game/node_modules ./node_modules
+# echo 'packaging application'
+# rm -rf ./node_modules
+# scp -r pi@192.168.0.2:/home/pi/escape-game/node_modules ./node_modules
+
+# echo 'building front'
+# rm -rf ./front.vue/dist
+# scp -r pi@192.168.0.2:/home/pi/escape-game/front.vue/dist ./front.vue/dist
+# sed s/\$\{DEVICE_NAME\}/$DEVICE_NAME/ -i ./front.vue/dist/js/app.*.js
 
 echo 'starting service'
 sudo service eg start

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Ready from './views/Ready.vue'
 import Dashboard from './views/Dashboard.vue'
 import CreativityTraining from './views/CreativityTraining.vue'
+import Dark from './views/Dark.vue'
 
 Vue.use(Router)
 
@@ -20,6 +21,10 @@ export default new Router({
       path: '/dashboard',
       name: 'dashboard',
       component: Dashboard
+    }, {
+      path: '/dark',
+      name: 'dark',
+      component: Dark
     }, {
       path: '/creativity-training',
       name: 'creativity-training',
