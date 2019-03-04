@@ -7,12 +7,12 @@ const http = require('http').Server(app)
 const io = require('socket.io')(http)
 const config = require('./config/config')
 const { MainServerService } = require('./services/main.server.service')
-const { gpioListener } = require('./services/gpio.service')
+// const { gpioListener } = require('./services/gpio.service')
 
 app.use(express.static(path.join(__dirname, '../front.old/views')))
 app.use(express.static(path.join(__dirname, '../front.old/static')))
 
-app.use('/new', express.static(path.join(__dirname, '../front.vue')))
+app.use('/new', express.static(path.join(__dirname, '../front.vue/dist')))
 
 app.get('/download', function (req, res) {
   const archive = archiver('zip')
@@ -26,14 +26,14 @@ app.get('/download', function (req, res) {
   archive.finalize()
 })
 
-app.get('/gpio/:channel/:state', function (req, res) {
-  const pin = req.params.channel
-  const value = req.params.state
-  console.log('gpio', `${pin}_${value}`)
-  const toEmit = `${pin}_${value}`
-  gpioListener.emit(toEmit)
-  res.send('ok->' + toEmit)
-})
+// app.get('/gpio/:channel/:state', function (req, res) {
+//   const pin = req.params.channel
+//   const value = req.params.state
+//   console.log('gpio', `${pin}_${value}`)
+//   const toEmit = `${pin}_${value}`
+//   gpioListener.emit(toEmit)
+//   res.send('ok->' + toEmit)
+// })
 
 http.listen(config.port, () => console.log(`app listening on port ${config.port}!`))
 const mainServer = new MainServerService(config.mainServer)
