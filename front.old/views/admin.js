@@ -16,19 +16,19 @@ class Connections extends React.Component {
       <div className="navbar-nav">
         {connectionsRender}
         <div className="nav-item">
-          <span 
+          <span
               className="badge badge-danger"
               style={{'cursor':'pointer', 'margin-left': '50px'}}
-              onClick={() => window.confirm("Attention vous allez effacer les données courantes et redémarrer une partie de jeu") 
-              ? socket.emit('restart-game') : null}> 
-              Arrêter et redémarrer 
+              onClick={() => window.confirm("Attention vous allez effacer les données courantes et redémarrer une partie de jeu")
+              ? socket.emit('restart-game') : null}>
+              Arrêter et redémarrer
             </span>
-          <span 
+          <span
               className="badge badge-danger"
               style={{'cursor':'pointer', 'margin-left': '10px'}}
-              onClick={() => window.confirm("Attention vous allez effacer les données courantes et eteindre tous les appareils. Débrancher puis rebrancher la prise principale pour rallumer l'ensemble") 
-              ? socket.emit('shutdown') : null}> 
-              Eteindre 
+              onClick={() => window.confirm("Attention vous allez effacer les données courantes et eteindre tous les appareils. Débrancher puis rebrancher la prise principale pour rallumer l'ensemble")
+              ? socket.emit('shutdown') : null}>
+              Eteindre
             </span>
         </div>
       </div>
@@ -49,7 +49,7 @@ class Main extends React.Component {
   return (
   <div>
     {flows}
-    <a 
+    <a
         style={{'margin-left':20}}
         className="badge badge-primary"
         href="/download"> Télécharger l'export </a>
@@ -118,14 +118,14 @@ class Action extends React.Component {
     const action = this.props.action;
     if(typeof action.type != "undefined") return (<Flow flow={action}/>);
     const state = this.computeState(action.state || 'pending', action.startTime);
-    const button = (<span 
+    const button = (<span
         className="badge badge-primary"
         style={{cursor: "pointer", visibility: (this.state.showButton ? 'visible' : 'hidden')}}
-        onClick={() => socket.emit('force')}> {action.force || 'Forcer'} </span>);
+        onClick={() => socket.emit('trigger', action.name)}> {action.force || 'Forcer'} </span>);
     const description = action.description;
     const className = `badge badge-${state.badge}`;
     const showButton = () => this.setState({showButton: !this.state.showButton});
-    const stateBadge = <span className={className} 
+    const stateBadge = <span className={className}
                              onClick={() => showButton()} >{state.text}</span>
     const response = action.response ? <Response response={action.response}/> : null;
     return (
@@ -170,6 +170,7 @@ socket.on('connect', () => launchSocket());
 launchSocket();
 socket.on('mainFlow', mainFlow => {
   console.log('mainFlow', mainFlow);
+  ReactDOM.unmountComponentAtNode(document.getElementById('main'))
   ReactDOM.render(<Main flowList={mainFlow}/>,
     document.getElementById('main')
   )
