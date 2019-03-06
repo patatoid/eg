@@ -18,7 +18,7 @@ async function start () {
     socket.join('all')
     socket.on('identification', id => {
       if(id === 'interface') socket.emit('mainFlow', mainFlow);
-      if (['crea1', 'crea2', 'crea3'].filter((device) => device === id)[0]) socket.join('satellite')
+      if (['crea1', 'crea2', 'crea3'].filter((device) => device === id)[0]) socket.join('satelite')
       if (['main'].filter((device) => device === id)[0]) socket.join('main')
       if (['interface'].filter((device) => device === id)[0]) socket.join('interface')
 
@@ -31,7 +31,7 @@ async function start () {
     })
     // TODO move that in action service
     socket.on('elec-breaker-on', () => {
-      actionService.trigger('trainCreativity')
+      triggerAction('lightOn')
     })
     socket.on('creativity-training-end', () => {
       triggerAction('startCreativityTask')

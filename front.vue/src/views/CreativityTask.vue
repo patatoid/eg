@@ -1,21 +1,20 @@
 <template>
   <div class="creativity-task">
     <svg ref="canvas" class="canvas" width="500" height="500">
-      <circle ref="word1" cx="50" cy="50" r="150" fill="#aaa" />
+      <circle ref="answer" cx="50" cy="50" r="150" fill="white" />
+      <text ref="answerText" x="50" y="50" text-anchor="middle" font-size="40" alignment-baseline="middle" fill="#5f3" display="none">"parlez"</text>
+      <circle ref="word1" cx="50" cy="50" r="150" stroke="#aaa" fill="white" />
       <text ref="word1Text" x="50" y="50" text-anchor="middle" font-size="40" alignment-baseline="middle"></text>
-      <circle ref="word2" cx="50" cy="50" r="150" fill="#aaa" />
+      <circle ref="word2" cx="50" cy="50" r="150" stroke="#aaa" fill="white" />
       <text ref="word2Text" x="50" y="50" text-anchor="middle" font-size="40" alignment-baseline="middle"></text>
-      <circle ref="word3" cx="50" cy="50" r="150" fill="#aaa" />
+      <circle ref="word3" cx="50" cy="50" r="150" stroke="#aaa" fill="white" />
       <text ref="word3Text" x="50" y="50" text-anchor="middle" font-size="40" alignment-baseline="middle"></text>
-      <circle ref="answer" cx="50" cy="50" r="150" fill="#9fa" />
-      <text ref="answerText" x="50" y="50" text-anchor="middle" font-size="40" alignment-baseline="middle" fill="black" class="hidden">✓</text>
     </svg>
   </div>
 </template>
 
 <script>
 import * as d3 from "d3"
-import { cloneDeep } from 'lodash'
 import { data } from '@/data/creativity-task'
 import socket from '@/socket'
 
@@ -28,7 +27,7 @@ export default {
       .force("link", d3
         .forceLink()
         .id(function(d) { return d.id; })
-        .distance((d) => { console.log(d); return d.value * 800 })
+        .distance((d) => { return d.value * 800 })
         .strength(0.5)
       )
       .force("center", d3.forceCenter(window.innerWidth / 2, innerHeight / 2))
@@ -42,10 +41,15 @@ export default {
     }
   },
   mounted () {
-    this.next()
+    const answer = { node: this.$refs.answer, text: this.$refs.answerText }
+    answer.node.setAttribute('cx', window.innerWidth / 2)
+    answer.node.setAttribute('cy', window.innerHeight / 2)
+
     socket.on('next-creativity-trial', () => {
       this.answer()
     })
+
+    this.next()
   },
   methods: {
     buildGraphFromData (data) {
@@ -67,6 +71,25 @@ export default {
 
       this.draw()
     },
+    pushOn () {
+      if (this.pending) return
+      const answer = { node: this.$refs.answer, text: this.$refs.answerText }
+      answer.text.setAttribute('display', 'block')
+      answer.text.setAttribute('x', window.innerWidth / 2)
+      answer.text.setAttribute('y', window.innerHeight / 2)
+      answer.node.setAttribute('class', 'answering')
+      answer.node.setAttribute('stroke', '#5f3')
+      answer.node.setAttribute('stroke-width', '5')
+    },
+    pushOff () {
+      const answer = { node: this.$refs.answer, text: this.$refs.answerText }
+      answer.text.setAttribute('display', 'none')
+      answer.node.removeAttribute('stroke')
+      answer.node.setAttribute('stroke-width', '5')
+      setTimeout(() => {
+        this.answer()
+      }, 500)
+    },
     answer () {
       if (this.pending) return
       this.pending = true
@@ -86,8 +109,6 @@ export default {
       const canvas = this.$refs.canvas
       canvas.setAttribute('height', window.innerHeight)
       canvas.setAttribute('width', window.innerWidth)
-      const width = canvas.width
-      const height = canvas.height
 
       this.simulation
         .nodes(currentGraph.nodes)
@@ -102,22 +123,20 @@ export default {
         3: { node: this.$refs.word3, text: this.$refs.word3Text }
       }
       const answer = { node: this.$refs.answer, text: this.$refs.answerText }
-      answer.node.setAttribute('display', 'none')
+      answer.node.setAttribute('fill', 'white')
       function ticked () {
-        currentGraph.links.forEach(drawLink);
         currentGraph.nodes.forEach(drawNode);
-
-        function drawLink(d) {
-        }
 
         function drawNode(d) {
           if (d.name === '?') {
-            answer.node.setAttribute('display', 'block')
+            answer['node'].setAttribute('class', 'not-answering')
+            answer['node'].setAttribute('fill', '#9fa')
             answer['node'].setAttribute('cx', d.x)
             answer['node'].setAttribute('cy', d.y)
             answer['text'].setAttribute('x', d.x)
             answer['text'].setAttribute('y', d.y)
           } else {
+
             words[d.id]['node'].setAttribute('cx', d.x)
             words[d.id]['node'].setAttribute('cy', d.y)
             words[d.id]['text'].setAttribute('x', d.x)
@@ -134,5 +153,18 @@ export default {
 <style scoped lang="scss">
 .hidden {
   display: none;
+}
+@keyframes smooth {
+  from { transform: scale(1) }
+  15% { transform: scale(1.5) }
+  30% { transform: scale(1) }
+  70% { transform: scale(1) }
+  85% { transform: scale(1.5)}
+  to { transform: scale(1) }
+}
+.answering {
+  transition: transform .4s ease-in-out;
+  transform-origin: center;
+  animation: smooth 1.2s linear infinite;
 }
 </style>

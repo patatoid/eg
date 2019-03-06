@@ -10,11 +10,12 @@ class ActionService {
       init: 'initial',
       transitions: [
         { name: 'boot', from: 'initial', to: 'ready' },
-        { name: 'restart', from: ['started', 'initial', 'ready', 'started', 'dark', 'creativityTraining', 'creativityTask'], to: 'ready' },
+        { name: 'restart', from: '*', to: 'ready' },
         { name: 'start', from: 'ready', to: 'started' },
         { name: 'darkness', from: 'started', to: 'dark' },
-        { name: 'trainCreativity', from: 'dark', to: 'creativityTraining' },
-        { name: 'startCreativityTask', from: ['started', 'initial', 'ready', 'started', 'dark', 'creativityTraining', 'creativityTask'], to: 'creativityTask' }
+        { name: 'lightOn', from: 'dark', to: 'light' },
+        { name: 'trainCreativity', from: 'light', to: 'creativityTraining' },
+        { name: 'startCreativityTask', from: 'creativityTraining', to: 'creativityTask' }
       ],
       methods: {
         onRestart: async () => {
@@ -44,11 +45,14 @@ class ActionService {
           await DeviceService.on(DeviceService.GYRO)
           await SoundService.playAndWait(SoundService.siren, 10)
         },
-        onTrainCreativity: async () => {
+        onLightOn: async () => {
+          io.in('all').emit('open-dark')
+
           await DeviceService.off(DeviceService.GYRO)
           await DeviceService.on(DeviceService.GLOBAL_LIGHT)
-
-          io.in('satellite').emit('open-dark')
+        },
+        onTrainCreativity: async () => {
+          io.in('satelite').emit('open-dark')
           io.in('main').emit('open-creativity-training')
         },
         onStartCreativityTask: async () => {
