@@ -35,7 +35,7 @@ export default {
     incrementSays (current) {
       const target = this.says.slice(0)
       const i = target.indexOf(current)
-      if (i === -1) return
+      if (i === -1) return this.$emit('end')
 
       let handler = null
       function next () {
@@ -54,10 +54,8 @@ export default {
       return current.then((current) => {
         if (current.length === target.length) {
           const result = this.batchSays.slice(0)
-          if (this.says.indexOf(target) !== this.says.length - 1) {
-            result[i] = Object.assign(result[i], { end: true })
-            this.batchSays = result
-          }
+          result[i] = Object.assign(result[i], { end: true })
+          this.batchSays = result
           return Promise.reject()
         }
         return new Promise((resolve) => {

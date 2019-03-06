@@ -2,9 +2,9 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import socket from './socket'
 
 Vue.config.productionTip = false
-const socket = io('http://192.168.0.2:3000')
 
 new Vue({
   router,
@@ -20,6 +20,9 @@ socket.on('open-dark', () => {
 })
 socket.on('open-creativity-training', () => {
   router.push({ name: 'creativity-training' })
+})
+socket.on('open-creativity-task', () => {
+  router.push({ name: 'creativity-task' })
 })
 socket.on('open-ready', () => {
   router.push({ name: 'ready' })

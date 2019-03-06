@@ -1,11 +1,12 @@
 <template>
   <div class="creativity-training">
-    <Console :says="says"/>
+    <Console :says="says" @end="dispatch()" />
   </div>
 </template>
 
 <script>
 import Console from '@/components/Console.vue'
+import socket from '@/socket'
 
 export default {
   name: 'creativity-training',
@@ -24,6 +25,13 @@ export default {
         "[ MINE ]",
         "Très bien alors... à vos postes ! Mon module se dégrade de minute en minute. Si vous ne faites rien, il est probable que dans 5 minutes, j'aurai définitivement perdu l'usage de la parole. Alors dépêchez-vous, je vous en prie. "
       ]
+    }
+  },
+  methods: {
+    dispatch () {
+      setTimeout(() => {
+        socket.emit('creativity-training-end')
+      }, 2000)
     }
   }
 }

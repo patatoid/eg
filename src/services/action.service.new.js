@@ -13,7 +13,8 @@ class ActionService {
         { name: 'restart', from: ['started', 'initial', 'ready', 'started', 'dark', 'creativityTraining'], to: 'ready' },
         { name: 'start', from: 'ready', to: 'started' },
         { name: 'darkness', from: 'started', to: 'dark' },
-        { name: 'trainCreativity', from: 'dark', to: 'creativityTraining' }
+        { name: 'trainCreativity', from: 'dark', to: 'creativityTraining' },
+        { name: 'startCreativityTask', from: 'creativityTraining', to: 'creativityTask' }
       ],
       methods: {
         onRestart: async () => {
@@ -52,6 +53,9 @@ class ActionService {
 
           io.in('satellite').emit('open-dark')
           io.in('main').emit('open-creativity-training')
+        },
+        onStartCreativityTask: async () => {
+          io.in('all').emit('open-creativity-task')
         }
       }
     })

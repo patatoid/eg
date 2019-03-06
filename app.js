@@ -9,6 +9,7 @@ start()
 async function start () {
 
   const mainFlow = await FlowService.setup()
+  const deviceSocket = {}
 
   io.on('connection', function(socket) {
     socket.join('all')
@@ -20,6 +21,7 @@ async function start () {
 
       socket.on('disconnect', () => connections.setState(id, false));
       connections.setState(id, true);
+      Object.assign(deviceSocket, { [id]: socket })
     });
     socket.on('trigger', actionName => {
       triggerAction(actionName)
@@ -27,6 +29,9 @@ async function start () {
     // TODO move that in action service
     socket.on('elec-breaker-on', () => {
       actionService.trigger('trainCreativity')
+    })
+    socket.on('creativity-training-end', () => {
+      io.in('all').emit('open-creativity-task')
     })
   })
 
