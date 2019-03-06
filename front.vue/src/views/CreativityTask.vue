@@ -1,5 +1,5 @@
 <template>
-  <div class="creativity-task" v-on:click="answer()">
+  <div class="creativity-task">
     <svg ref="canvas" class="canvas" width="500" height="500">
       <circle ref="word1" cx="50" cy="50" r="150" fill="#aaa" />
       <text ref="word1Text" x="50" y="50" text-anchor="middle" font-size="40" alignment-baseline="middle"></text>
@@ -16,16 +16,13 @@
 <script>
 import * as d3 from "d3"
 import { cloneDeep } from 'lodash'
-import HelloWorld from '@/components/HelloWorld.vue'
 import { data } from '@/data/creativity-task'
+import socket from '@/socket'
 
 let currentGraph
 
 export default {
   name: 'home',
-  components: {
-    HelloWorld
-  },
   data () {
     const simulation = d3.forceSimulation()
       .force("link", d3
@@ -46,6 +43,9 @@ export default {
   },
   mounted () {
     this.next()
+    socket.on('next-creativity-trial', () => {
+      this.answer()
+    })
   },
   methods: {
     buildGraphFromData (data) {
@@ -66,35 +66,6 @@ export default {
       currentGraph = this.buildGraphFromData(data.splice(0, 1)[0])
 
       this.draw()
-      this.speech()
-    },
-    speech () {
-      const recognition = new webkitSpeechRecognition()
-      recognition.continuous = false
-      recognition.lang = 'fr-FR'
-      recognition.interimResults = false
-      recognition.maxAlternatives = 5
-
-      recognition.start()
-
-      recognition.onerror = () => {
-        this.answer()
-      }
-      let time = Date.now()
-      recognition.onspeechstart = () => {
-        time = Date.now() - time
-      }
-
-      recognition.onresult = (event) => {
-        try {
-          var color = event.results[0][0].transcript
-        } catch (error) {
-          console.log(error)
-        }
-        console.log(event.results)
-        console.log(color)
-        this.answer()
-      }
     },
     answer () {
       if (this.pending) return

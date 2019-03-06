@@ -3,6 +3,9 @@ const actionService = require('./src/services/action.service.new')
 const { io } = require('./src/server');
 const { connections } = require('./src/services/state.service');
 const { FlowService } = require('./src/services/flow.service');
+const { GpioService } = require('./src/services/gpio.service');
+const { CreaService } = require('./src/services/crea.service');
+const { deviceName } = require('./src/config/config')
 
 start()
 
@@ -31,8 +34,15 @@ async function start () {
       actionService.trigger('trainCreativity')
     })
     socket.on('creativity-training-end', () => {
-      io.in('all').emit('open-creativity-task')
+      triggerAction('startCreativityTask')
     })
+    socket.on('creativity-trial-answer', ({ deviceName, data }) => {
+      io.to(deviceSocket[deviceName].id).emit('next-creativity-trial')
+    })
+  })
+
+  mainServer.socket.on('start-creativity-task', () => {
+    CreaService.startCrea()
   })
 
   async function triggerAction (actionName) {

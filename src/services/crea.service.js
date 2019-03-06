@@ -1,3 +1,4 @@
+const { io, mainServer } = require('../server')
 const config = require('../config/config')
 const Helper = require('../helper')
 const { gpio, GpioService } = require('./gpio.service')
@@ -9,39 +10,20 @@ const CREA_BUTTON_PIN = 22
 GpioService.declareGpioPin(CREA_BUTTON_PIN, gpio.DIR_IN, gpio.EDGE_BOTH)
 
 class CreaService {
-  static async handleCrea (socket) {
-    console.log('starting crea')
-    try {
-      await CreaService.creaCycle(socket, config.deviceName, 0)
-    } catch (e) {
-      throw e
-    }
-  }
-
-  static startCrea () {
-    console.log('launch crea')
-    Helper.openChromium('crea.html')
+  static async startCrea () {
+    await CreaService.creaCycle()
   }
 
   static stopCrea () {
-    console.log('Stop crea window')
-    Helper.closeChromium()
   }
 
-  static async creaCycle (socket, deviceName, index) {
-    if (index >= 10) return CreaService.stopCrea()
-    const wordsSent = words[config.deviceName][index]
-    console.log('cycle', index, wordsSent)
-    socket.emit('words', wordsSent)
-    const cycleStartTime = Date.now()
-    const timeout = async (time) => { const duration = await Helper.sleep(time); return { duration: time, data: null } }
-    const creaRecord = await Promise.race([
-      CreaService.buttonEvent(cycleStartTime),
-      timeout(30)
-    ])
-    const { mainServer } = require('../server')
-    mainServer.socket.emit('crea-record-' + config.deviceName, { ...creaRecord, index, words: wordsSent, deviceName })
-    await CreaService.creaCycle(socket, deviceName, index + 1)
+  static async creaCycle () {
+    const { data } = await CreaService.buttonEvent(Date.now())
+    console.log(mainServer.socket.emit('creativity-trial-answer', {
+      deviceName: config.deviceName,
+      data
+    }))
+    CreaService.creaCycle()
   }
 
   static async buttonEvent (cycleStartTime) {

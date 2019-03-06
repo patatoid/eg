@@ -1,7 +1,7 @@
 const StateMachine = require('javascript-state-machine')
 const SoundService = require('./sound.service')
 const DeviceService = require('./device.service')
-const { io, mainServer } = require('../server')
+const { io } = require('../server')
 const Helper = require('../helper')
 
 class ActionService {
@@ -10,11 +10,11 @@ class ActionService {
       init: 'initial',
       transitions: [
         { name: 'boot', from: 'initial', to: 'ready' },
-        { name: 'restart', from: ['started', 'initial', 'ready', 'started', 'dark', 'creativityTraining'], to: 'ready' },
+        { name: 'restart', from: ['started', 'initial', 'ready', 'started', 'dark', 'creativityTraining', 'creativityTask'], to: 'ready' },
         { name: 'start', from: 'ready', to: 'started' },
         { name: 'darkness', from: 'started', to: 'dark' },
         { name: 'trainCreativity', from: 'dark', to: 'creativityTraining' },
-        { name: 'startCreativityTask', from: 'creativityTraining', to: 'creativityTask' }
+        { name: 'startCreativityTask', from: ['started', 'initial', 'ready', 'started', 'dark', 'creativityTraining', 'creativityTask'], to: 'creativityTask' }
       ],
       methods: {
         onRestart: async () => {
@@ -28,8 +28,6 @@ class ActionService {
           io.in('all').emit('open-ready')
         },
         onBoot: async () => {
-          await DeviceService.on(DeviceService.MAGNET_CLOSET_1)
-          await DeviceService.on(DeviceService.MAGNET_CLOSET_2)
           Helper.openChromium('new/index.html', { cursor: true })
         },
         onStart: async () => {
@@ -45,7 +43,6 @@ class ActionService {
           await DeviceService.off(DeviceService.GLOBAL_LIGHT)
           await DeviceService.on(DeviceService.GYRO)
           await SoundService.playAndWait(SoundService.siren, 10)
-
         },
         onTrainCreativity: async () => {
           await DeviceService.off(DeviceService.GYRO)
@@ -56,6 +53,7 @@ class ActionService {
         },
         onStartCreativityTask: async () => {
           io.in('all').emit('open-creativity-task')
+          io.emit('start-creativity-task')
         }
       }
     })
@@ -69,7 +67,7 @@ class ActionService {
     try {
       return await this.stateMachine[action]()
     } catch (error) {
-    console.log(this.stateMachine)
+      console.log(this.stateMachine)
       console.log(error)
     }
   }

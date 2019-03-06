@@ -45,13 +45,18 @@ FlowService.setup = async () => {
     }]),
     new FlowService('Darkness', [{
       name: 'darkness',
-      description: "Faire sauter le disjoncteur",
+      description: 'Faire sauter le disjoncteur',
       force: actionService.can('darkness') && 'darkness'
     }]),
     new FlowService('Creativity training', [{
       name: 'trainCreativity',
-      description: "Entrainement à la créativité",
+      description: 'Entrainement à la créativité',
       force: actionService.can('trainCreativity') && 'trainCreativity'
+    }]),
+    new FlowService('Creativity task', [{
+      name: 'startCreativityTask',
+      description: 'Tâche de créativité',
+      force: actionService.can('startCreativityTask') && 'startCreativityTask'
     }])
   ]
 }
