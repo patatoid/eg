@@ -45,9 +45,11 @@ export default {
     answer.node.setAttribute('cx', window.innerWidth / 2)
     answer.node.setAttribute('cy', window.innerHeight / 2)
 
+    socket.off('creativity-trial-recording')
     socket.on('creativity-trial-recording', () => {
       this.pushOn()
     })
+    socket.off('next-creativity-trial')
     socket.on('next-creativity-trial', () => {
       this.answer()
     })
