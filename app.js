@@ -36,6 +36,9 @@ async function start () {
     socket.on('creativity-training-end', () => {
       triggerAction('startCreativityTask')
     })
+    socket.on('creativity-trial-recording', ({ deviceName, data }) => {
+      io.to(deviceSocket[deviceName].id).emit('creativity-trial-recording')
+    })
     socket.on('creativity-trial-answer', ({ deviceName, data }) => {
       io.to(deviceSocket[deviceName].id).emit('next-creativity-trial')
     })

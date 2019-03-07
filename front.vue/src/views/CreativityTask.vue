@@ -45,6 +45,9 @@ export default {
     answer.node.setAttribute('cx', window.innerWidth / 2)
     answer.node.setAttribute('cy', window.innerHeight / 2)
 
+    socket.on('creativity-trial-recording', () => {
+      this.pushOn()
+    })
     socket.on('next-creativity-trial', () => {
       this.answer()
     })
@@ -86,12 +89,10 @@ export default {
       answer.text.setAttribute('display', 'none')
       answer.node.removeAttribute('stroke')
       answer.node.setAttribute('stroke-width', '5')
-      setTimeout(() => {
-        this.answer()
-      }, 500)
     },
     answer () {
       if (this.pending) return
+      this.pushOff()
       this.pending = true
       currentGraph.nodes.push({ id: 4, name: '?', x: window.innerWidth / 2, y: window.innerHeight / 2 })
       currentGraph.links.push({ source: 4, target: 3, value: Math.sqrt(3) / 6 })

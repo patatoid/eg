@@ -19,15 +19,18 @@ class CreaService {
 
   static async creaCycle () {
     const { data } = await CreaService.buttonEvent(Date.now())
-    console.log(mainServer.socket.emit('creativity-trial-answer', {
+    mainServer.socket.emit('creativity-trial-answer', {
       deviceName: config.deviceName,
       data
-    }))
+    })
     CreaService.creaCycle()
   }
 
   static async buttonEvent (cycleStartTime) {
     await GpioService.buttonChanged(CREA_BUTTON_PIN, true)
+    mainServer.socket.emit('creativity-trial-recording', {
+      deviceName: config.deviceName
+    })
     console.log('start recording')
     const duration = Date.now() - cycleStartTime
     const recordProcess = SoundService.startRecording()
