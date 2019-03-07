@@ -1,5 +1,5 @@
 <template>
-  <div class="creativity-training">
+  <div class="dark">
     <Console :says="says"/>
   </div>
 </template>
@@ -8,7 +8,7 @@
 import Console from '@/components/Console.vue'
 
 export default {
-  name: 'creativity-training',
+  name: 'dark',
   components: {
     Console
   },

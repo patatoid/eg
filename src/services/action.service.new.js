@@ -15,7 +15,8 @@ class ActionService {
         { name: 'darkness', from: 'started', to: 'dark' },
         { name: 'lightOn', from: 'dark', to: 'light' },
         { name: 'trainCreativity', from: 'light', to: 'creativityTraining' },
-        { name: 'startCreativityTask', from: 'creativityTraining', to: 'creativityTask' }
+        { name: 'startCreativityTask', from: '*', to: 'creativityTask' },
+        { name: 'endCreativityTask', from: 'creativityTask', to: 'mooreSession' }
       ],
       methods: {
         onRestart: async () => {
@@ -58,6 +59,9 @@ class ActionService {
         onStartCreativityTask: async () => {
           io.in('all').emit('open-creativity-task')
           io.emit('start-creativity-task')
+        },
+        onEndCreativityTask: async () => {
+          io.in('satelite').emit('open-glitch')
         }
       }
     })

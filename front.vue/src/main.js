@@ -27,4 +27,7 @@ socket.on('open-creativity-task', () => {
 socket.on('open-ready', () => {
   router.push({ name: 'ready' })
 })
+socket.on('open-glitch', () => {
+  router.push({ name: 'glitch' })
+})
 socket.emit('identification', '${DEVICE_NAME}')

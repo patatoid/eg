@@ -11,7 +11,7 @@ git remote remove local
 git remote add local /home/pi/escape-game.git
 git stash
 git reset --hard HEAD^^^^^
-git pull --rebase pascal creativity-task
+git pull --rebase pascal moore-session
 
 echo 'push to local repository'
 git push -f local master
@@ -21,7 +21,7 @@ git push -f local master
 
 echo 'building front'
 cd ./front.vue
-npm i
+# npm i
 npm run build
 
 echo 'starting service'

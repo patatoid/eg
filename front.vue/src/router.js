@@ -5,6 +5,7 @@ import Dashboard from './views/Dashboard.vue'
 import CreativityTraining from './views/CreativityTraining.vue'
 import CreativityTask from './views/CreativityTask.vue'
 import Dark from './views/Dark.vue'
+import Glitch from './views/Glitch.vue'
 
 Vue.use(Router)
 
@@ -34,6 +35,10 @@ export default new Router({
       path: '/creativity-task',
       name: 'creativity-task',
       component: CreativityTask
+    }, {
+      path: '/glitch',
+      name: 'glitch',
+      component: Glitch
     }
   ]
 })

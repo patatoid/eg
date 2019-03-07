@@ -15,10 +15,9 @@
 
 <script>
 import * as d3 from "d3"
-import { data } from '@/data/creativity-task'
 import socket from '@/socket'
 
-let currentGraph
+let currentGraph, data
 
 export default {
   name: 'home',
@@ -54,6 +53,7 @@ export default {
       this.answer()
     })
 
+    data = require('../data/creativity-task').data.slice(0)
     this.next()
   },
   methods: {
@@ -72,9 +72,14 @@ export default {
       }
     },
     next () {
-      currentGraph = this.buildGraphFromData(data.splice(0, 1)[0])
+      const graphData = data.splice(0, 1)[0]
+      if (graphData) {
+        currentGraph = this.buildGraphFromData(graphData)
 
-      this.draw()
+        this.draw()
+      } else {
+        socket.emit('creativity-task-end')
+      }
     },
     pushOn () {
       if (this.pending) return
@@ -106,7 +111,7 @@ export default {
       setTimeout(() => {
         this.next()
         this.pending = false
-      }, 2500)
+      }, 1500)
     },
     draw () {
       const canvas = this.$refs.canvas

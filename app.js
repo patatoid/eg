@@ -36,6 +36,27 @@ async function start () {
     socket.on('creativity-training-end', () => {
       triggerAction('startCreativityTask')
     })
+    socket.on('creativity-task-end', () => {
+      const allEnded = Object.keys(deviceSocket).map((device) => {
+        const currentSocket = deviceSocket[device]
+        if (currentSocket.id === socket.id) {
+          Object.assign(currentSocket, { creativityTaskEnded: true })
+        }
+        return device
+      }).filter((device) => {
+        if (['crea1', 'crea2', 'crea3', 'main'].some((e) => e === device)) return device
+      }).every((device) => {
+        if (!device) return true
+        return deviceSocket[device].creativityTaskEnded
+      })
+
+      if (allEnded) {
+        triggerAction('endCreativityTask')
+        Object.keys(deviceSocket).forEach((device) => {
+          Object.assign(deviceSocket[device], { creativityTaskEnded: false })
+        })
+      }
+    })
     socket.on('creativity-trial-recording', ({ deviceName, data }) => {
       io.to(deviceSocket[deviceName].id).emit('creativity-trial-recording')
     })

@@ -1,7 +1,9 @@
 {
   "data": [
     ["article", "annoncer", "papier"],
-    ["raison", "poitrine", "briser"],
+    ["raison", "poitrine", "briser"]
+  ],
+  "other": [
     ["enser", "hésiter", "étudier"],
     ["aile", "libre", "chant"],
     ["promener", "nature", "feu"],
