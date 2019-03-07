@@ -7,7 +7,7 @@
         <span class="start"> >></span>
       </div>
       <div class="message">{{ say.message }}</div>
-      <div class="continue" v-if="say.end">[press any key]</div>
+      <div class="continue" v-if="!disablePrompt && say.end">[press any key]</div>
     </div>
   </div>
 </template>
@@ -18,7 +18,8 @@ import moment from 'moment'
 export default {
   name: 'Console',
   props: {
-    says: { type: Array }
+    says: { type: Array },
+    disablePrompt: { type: Boolean }
   },
   data () {
     return { batchSays: [] }

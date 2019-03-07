@@ -1,5 +1,5 @@
 <template>
-  <div class="creativity-task">
+  <div class="creativity-task" v-on:mousedown="pushOn()" v-on:mouseup="answer()">
     <svg ref="canvas" class="canvas" width="500" height="500">
       <circle ref="answer" cx="50" cy="50" r="150" fill="white" />
       <text ref="answerText" x="50" y="50" text-anchor="middle" font-size="40" alignment-baseline="middle" fill="#5f3" display="none">"parlez"</text>
@@ -78,7 +78,10 @@ export default {
 
         this.draw()
       } else {
+        socket.off('creativity-trial-recording')
+        socket.off('next-creativity-trial')
         socket.emit('creativity-task-end')
+        this.$router.push('creativity-task-end')
       }
     },
     pushOn () {
@@ -139,10 +142,6 @@ export default {
           if (d.name === '?') {
             answer['node'].setAttribute('class', 'not-answering')
             answer['node'].setAttribute('fill', '#9fa')
-            answer['node'].setAttribute('cx', d.x)
-            answer['node'].setAttribute('cy', d.y)
-            answer['text'].setAttribute('x', d.x)
-            answer['text'].setAttribute('y', d.y)
           } else {
 
             words[d.id]['node'].setAttribute('cx', d.x)

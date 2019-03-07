@@ -15,8 +15,10 @@ class ActionService {
         { name: 'darkness', from: 'started', to: 'dark' },
         { name: 'lightOn', from: 'dark', to: 'light' },
         { name: 'trainCreativity', from: 'light', to: 'creativityTraining' },
-        { name: 'startCreativityTask', from: '*', to: 'creativityTask' },
-        { name: 'endCreativityTask', from: 'creativityTask', to: 'mooreSession' }
+        { name: 'startCreativityTask', from: 'creativityTraining', to: 'creativityTask' },
+        { name: 'endCreativityTask', from: 'creativityTask', to: 'waitRedNucleaAppearance' },
+        { name: 'redNucleaAppear', from: 'waitRedNucleaAppearance', to: 'firstGlitch' },
+        { name: 'openMooreSession', from: 'firstGlitch', to: 'mooreSession' }
       ],
       methods: {
         onRestart: async () => {
@@ -60,8 +62,13 @@ class ActionService {
           io.in('all').emit('open-creativity-task')
           io.emit('start-creativity-task')
         },
-        onEndCreativityTask: async () => {
-          io.in('satelite').emit('open-glitch')
+        onEndCreativityTask: async () => { },
+        onRedNucleaAppear: async () => {
+          io.in('all').emit('open-first-glitch')
+        },
+        onOpenMooreSession: async () => {
+          io.in('main').emit('open-second-glitch')
+          io.in('satelite').emit('open-dark')
         }
       }
     })

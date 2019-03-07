@@ -6,11 +6,11 @@
 
 <script>
 export default {
-  name: 'glitch',
-  data () {
-    return {
-      says: []
-    }
+  name: 'second-glitch',
+  mounted () {
+    setTimeout(() => {
+      this.$router.push({ name: 'moore-session' })
+    }, 10000)
   }
 }
 </script>

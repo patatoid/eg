@@ -61,6 +61,15 @@ FlowService.setup = async () => {
       name: 'startCreativityTask',
       description: 'Tâche de créativité',
       force: actionService.can('startCreativityTask') && 'startCreativityTask'
+    }]),
+    new FlowService('Moore session', [{
+      name: 'redNucleaAppear',
+      description: 'Premier glitch',
+      force: actionService.can('redNucleaAppear') && 'redNucleaAppear'
+    }, {
+      name: 'openMooreSession',
+      description: 'Session de Moore',
+      force: actionService.can('openMooreSession') && 'openMooreSession'
     }])
   ]
 }
