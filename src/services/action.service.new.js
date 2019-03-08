@@ -18,7 +18,7 @@ class ActionService {
         { name: 'startCreativityTask', from: 'creativityTraining', to: 'creativityTask' },
         { name: 'endCreativityTask', from: 'creativityTask', to: 'waitRedNucleaAppearance' },
         { name: 'redNucleaAppear', from: 'waitRedNucleaAppearance', to: 'firstGlitch' },
-        { name: 'openMooreSession', from: 'firstGlitch', to: 'mooreSession' }
+        { name: 'openMooreSession', from: '*', to: 'mooreSession' }
       ],
       methods: {
         onRestart: async () => {
@@ -69,6 +69,7 @@ class ActionService {
         onOpenMooreSession: async () => {
           io.in('main').emit('open-second-glitch')
           io.in('satelite').emit('open-dark')
+          io.emit('start-sequence')
         }
       }
     })

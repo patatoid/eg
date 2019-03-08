@@ -1,9 +1,7 @@
-const { io, mainServer } = require('../server')
+const { mainServer } = require('../server')
 const config = require('../config/config')
-const Helper = require('../helper')
 const { gpio, GpioService } = require('./gpio.service')
 const SoundService = require('./sound.service')
-const words = require('../config/words')
 
 const CREA_BUTTON_PIN = 22
 
