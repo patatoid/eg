@@ -1,39 +1,32 @@
 <template>
   <div class="moore-desktop">
     <div class="icon pig">
-      <i v-b-modal.modal1></i>
-      <span>Un nom de document</span>
+      <i v-b-modal.family></i>
+      <span>Family.jpg</span>
     </div>
     <div class="icon cow">
-      <i v-b-modal.modal1></i>
-      <span>Un nom de document</span>
+      <i v-b-modal.mooreCrisis></i>
+      <span>Moore crisis.pdf</span>
     </div>
     <div class="icon cow">
-      <i v-b-modal.modal1></i>
-      <span>Un nom de document</span>
+      <i v-b-modal.mooreNucleaReport></i>
+      <span>Moore Nuclea Report.pdf</span>
     </div>
     <div class="icon chick">
-      <i v-b-modal.modal1></i>
-      <span>Un nom de document</span>
+      <i v-b-modal.messenger></i>
+      <span>Messenger</span>
     </div>
-    <div class="icon pig">
-      <i v-b-modal.modal1></i>
-      <span>Un nom de document</span>
-    </div>
-    <div class="icon chick">
-      <i v-b-modal.modal1></i>
-      <span>Un nom de document</span>
-    </div>
-    <div class="icon chick">
-      <i v-b-modal.modal1></i>
-      <span>Un nom de document</span>
-    </div>
-    <div class="icon chick">
-      <i v-b-modal.modal1></i>
-      <span>Un nom de document</span>
-    </div>
-    <b-modal size="xl" hide-footer id="modal1" title="BootstrapVue">
-      <img src="../assets/dashboard.jpg" />
+    <b-modal :no-fade="true" no-close-on-backdrop hide-backdrop size="xl" hide-footer id="messenger" title="Messenger">
+      <img src="../assets/messenger.png" />
+    </b-modal>
+    <b-modal :no-fade="true" no-close-on-backdrop hide-backdrop size="xl" hide-footer id="family" title="Family.jpg">
+      <img src="../assets/family.jpg" />
+    </b-modal>
+    <b-modal :no-fade="true" no-close-on-backdrop hide-backdrop size="xl" hide-footer id="mooreCrisis" title="Moore crisis.pdf">
+      <iframe src="pdf/moore-crisis.pdf" />
+    </b-modal>
+    <b-modal :no-fade="true" no-close-on-backdrop hide-backdrop size="xl" hide-footer id="mooreNucleaReport" title="Moore Nuclea report.pdf">
+      <iframe src="pdf/moore-nuclea-report.pdf" />
     </b-modal>
   </div>
 </template>
@@ -47,6 +40,7 @@ export default {
 <style lang="scss">
 .moore-desktop {
   background: black;
+  background-size: cover;
   height: 100%;
   padding: 25px;
   cursor: initial;
@@ -54,10 +48,11 @@ export default {
   flex-direction: column;
   flex-wrap: wrap;
   align-content: flex-start;
+  user-select: none;
   .icon {
-    flex: 0 1 100px;
+    flex: 0 1 130px;
     display: inline-block;
-    height: 150px;
+    height: 75px;
     width: 75px;
     cursor: pointer;
     margin: 25px;
@@ -91,10 +86,26 @@ export default {
       line-height: 1em;
     }
   }
-  .modal-body {
-    padding: 0;
+  #messenger {
     img {
       width: 100%;
+      height: auto;
+    }
+    .modal-body {
+      display: block;
+      overflow-y: scroll;
+    }
+  }
+  .modal-body {
+    padding: 0;
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    iframe, img {
+      width: 100%;
+      height: 80vh;
     }
   }
   .modal-content {
