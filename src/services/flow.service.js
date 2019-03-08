@@ -70,6 +70,27 @@ FlowService.setup = async () => {
       name: 'openMooreSession',
       description: 'Session de Moore',
       force: actionService.can('openMooreSession') && 'openMooreSession'
+    }]),
+    new FlowService('End', [{
+      name: 'startKeys',
+      description: "Mets en attente d'insertion des clefs",
+      force: actionService.can('startKeys') && 'startKeys'
+    }, {
+      name: 'insertKey1',
+      description: "Clef 1 insérée",
+      force: actionService.can('insertKey1') && 'insertKey1'
+    }, {
+      name: 'insertKey2',
+      description: "Clef 2 insérée",
+      force: actionService.can('insertKey2') && 'insertKey2'
+    }, {
+      name: 'insertKey3',
+      description: "Clef 3 insérée",
+      force: actionService.can('insertKey3') && 'insertKey3'
+    }, {
+      name: 'insertKey4',
+      description: "Clef 4 insérée",
+      force: actionService.can('insertKey4') && 'insertKey4'
     }])
   ]
 }

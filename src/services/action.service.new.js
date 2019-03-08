@@ -18,7 +18,12 @@ class ActionService {
         { name: 'startCreativityTask', from: 'creativityTraining', to: 'creativityTask' },
         { name: 'endCreativityTask', from: 'creativityTask', to: 'waitRedNucleaAppearance' },
         { name: 'redNucleaAppear', from: 'waitRedNucleaAppearance', to: 'firstGlitch' },
-        { name: 'openMooreSession', from: 'firstGlitch', to: 'mooreSession' }
+        { name: 'openMooreSession', from: 'firstGlitch', to: 'mooreSession' },
+        { name: 'startKeys', from: '*', to: 'end' },
+        { name: 'insertKey1', from: '*', to: 'end' },
+        { name: 'insertKey2', from: '*', to: 'end' },
+        { name: 'insertKey3', from: '*', to: 'end' },
+        { name: 'insertKey4', from: '*', to: 'end' }
       ],
       methods: {
         onRestart: async () => {
@@ -69,6 +74,9 @@ class ActionService {
         onOpenMooreSession: async () => {
           io.in('main').emit('open-second-glitch')
           io.in('satelite').emit('open-dark')
+        },
+        onStartKeys: async () => {
+          io.emit('start-keys')
         }
       }
     })

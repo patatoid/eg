@@ -5,7 +5,9 @@ const { connections } = require('./src/services/state.service');
 const { FlowService } = require('./src/services/flow.service');
 const { GpioService } = require('./src/services/gpio.service');
 const { CreaService } = require('./src/services/crea.service');
+const { KeysService } = require('./src/services/keys.service');
 const { deviceName } = require('./src/config/config')
+const config = require('./src/config/config')
 
 start()
 
@@ -63,11 +65,20 @@ async function start () {
     socket.on('creativity-trial-answer', ({ deviceName, data }) => {
       io.to(deviceSocket[deviceName].id).emit('next-creativity-trial')
     })
+    socket.on('key-on', (key) => {
+      triggerAction(`insertKey${key}`)
+    })
   })
 
   mainServer.socket.on('start-creativity-task', () => {
     CreaService.startCrea()
   })
+
+  if (config.deviceName === 'crea1' || config.deviceName === 'crea3') {
+    mainServer.socket.on('start-keys', () => {
+      KeysService.start()
+    })
+  }
 
   async function triggerAction (actionName) {
     mainFlow.forEach((flow) => {
